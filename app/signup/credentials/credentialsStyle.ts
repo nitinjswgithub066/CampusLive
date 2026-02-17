@@ -1,0 +1,88 @@
+import { StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 25,
+    paddingTop: 20,
+  },
+  backButton: {
+    marginTop: 50,
+    marginBottom: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+  },
+  header: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#34A853',
+    marginBottom: 5,
+  },
+  subHeader: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 25,
+  },
+  progressContainer: {
+    marginBottom: 35,
+  },
+  pageIndicator: {
+    fontSize: 14,
+    color: '#34A853',
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  progressBarBackground: {
+    height: 6,
+    backgroundColor: '#E8F5E9',
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    backgroundColor: '#34A853',
+    width: '66%',
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
+    paddingHorizontal: 15,
+    marginBottom: 18,
+    height: 58,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  inputIcon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
+  },
+  nextButton: {
+    marginTop: 20,
+    borderRadius: 15,
+    overflow: 'hidden',
+  },
+  gradient: {
+    height: 58,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
+
+export default styles;

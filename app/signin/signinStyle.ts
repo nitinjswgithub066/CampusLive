@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     },
     languageContainer: {
         alignItems: 'center',
-        marginTop: 20,
+        paddingTop: 100,
     },
     languageText: {
         color: '#555',
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     footerContainer: {
-        paddingBottom: 40,
+        paddingBottom: 70,
         paddingHorizontal: 25,
     },
     createAccountBtn: {
@@ -87,6 +87,27 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    height: 55,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 12,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    paddingHorizontal: 15,
+  },
+  passwordInput: {
+    flex: 1, 
+    height: '100%',
+    fontSize: 16,
+    color: '#000',
+  },
+  eyeIcon: {
+    padding: 5,
+  },
 });
 
 export default styles;
