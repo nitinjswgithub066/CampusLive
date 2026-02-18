@@ -78,7 +78,7 @@ export default function SignInScreen() {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/forgotPassword/resetPassword/resetByMail' as any)}>
           <Text style={styles.forgotPassword}>Forgot Password ?</Text>
         </TouchableOpacity>
       </View>

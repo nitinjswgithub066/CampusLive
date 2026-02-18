@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 25,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   backButton: {
     marginTop: 50,
