@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         marginBottom: 15,
         fontSize: 16,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: '#E0E0E0',
     },
     loginButtonWrapper: {
@@ -60,14 +60,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loginButtonText: {
-        color: '#FFF',
+        color: '#17df99',
         fontSize: 18,
         fontWeight: '600',
     },
     forgotPassword: {
         marginTop: 20,
+        fontSize: 16,
         color: '#444',
-        fontWeight: '500',
+        fontWeight: '600',
     },
     footerContainer: {
         paddingBottom: 70,
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F2',
     borderRadius: 12,
     marginBottom: 15,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#E0E0E0',
     paddingHorizontal: 15,
   },

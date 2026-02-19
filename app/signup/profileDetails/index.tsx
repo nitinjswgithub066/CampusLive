@@ -19,13 +19,6 @@ export default function ProfileDetails() {
       <Text style={styles.header}>Finalize Your Profile</Text>
       <Text style={styles.subHeader}>Final step! Set your public identity and secure your account.</Text>
 
-      <View style={styles.avatarSection}>
-        <View style={styles.avatarCircle}>
-          <Ionicons name="person-add-outline" size={40} color="#34A853" />
-        </View>
-        <Text style={styles.avatarLabel}>Add profile photo</Text>
-      </View>
-
       <View style={styles.inputWrapper}>
         <Ionicons name="at-outline" size={20} color="#999" style={styles.inputIcon} />
         <TextInput style={styles.input} placeholder="Username" placeholderTextColor="#999" />
@@ -61,7 +54,9 @@ export default function ProfileDetails() {
         style={styles.nextButton} 
         onPress={() => router.push('/(tabs)')}
       >
-          <Text style={styles.buttonText}>Finish & Start Streaming</Text>
+        <View style={styles.buttonBackground}>
+          <Text style={styles.buttonText}>Continue</Text>
+        </View>
       </TouchableOpacity>
     </ScrollView>
   );

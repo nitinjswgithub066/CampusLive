@@ -72,8 +72,11 @@ export default function PersonalDetails() {
       <TouchableOpacity 
         style={styles.nextButton} 
         onPress={() => router.push('/signup/credentials' as any)}
+        activeOpacity={0.8}
       >
-        <Text style={styles.buttonText}>Continue</Text>
+        <View style={styles.buttonBackground}>
+          <Text style={styles.buttonText}>Continue</Text>
+        </View>
       </TouchableOpacity>
     </View>
   );

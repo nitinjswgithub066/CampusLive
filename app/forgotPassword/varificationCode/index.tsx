@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import styles from './varificationCodeStyle';
+import { Pressable } from 'react-native';
 
 export default function VerifyCode() {
   const router = useRouter();
@@ -33,13 +34,20 @@ export default function VerifyCode() {
 
       <TouchableOpacity 
         style={styles.continueButton} 
-        onPress={() => router.push('/forgotPassword/newPassword' as any)}
+        onPress={() => router.push('/forgotPassword/newPassword')}
+        activeOpacity={0.8}
       >
+        <View style={styles.buttonBackground}>
           <Text style={styles.buttonText}>Continue</Text>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.linkButton}>
-        <Text style={styles.linkText}>Try another way</Text>
+        <Pressable onPress={() => {/* handle action */ }} style={styles.linkButton}>
+          {({ pressed }) => (
+            <Text style={[styles.linkText, pressed && { color: '#34A853' }]}>Try another method</Text>
+          )}
+        </Pressable>
       </TouchableOpacity>
     </View>
   );

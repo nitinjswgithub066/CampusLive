@@ -18,25 +18,24 @@ export default StyleSheet.create({
   subHeader: { 
     fontSize: 14, 
     color: '#666', 
-    marginVertical: 10, 
     marginBottom: 30 
   },
   inputWrapper: {
     flexDirection: 'row', 
     alignItems: 'center',
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#FFFFFF', 
     borderRadius: 15,
-    height: 55,
+    height: 60, 
     paddingHorizontal: 15,
-    borderWidth: 1,
-    borderColor: '#EEE',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    borderWidth: 2,
+    borderColor: '#F0F0F0',
+    marginBottom: 15,
+    elevation: 4,
+    shadowColor: '#0c0c0c',
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 8,
   },
-
   input: { 
     flex: 1, 
     fontSize: 16, 
@@ -46,31 +45,43 @@ export default StyleSheet.create({
     padding: 5,
   },
   continueButton: { 
-    marginTop: 30, 
-    borderRadius: 15, 
-    overflow: 'hidden' 
+    marginTop: 40, 
+    borderRadius: 30,
+    overflow: 'hidden',
+    width: '100%',
+    elevation: 8,
+    shadowColor: '#181717',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
   },
-  gradient: { 
-    height: 55, 
+  buttonBackground: { 
+    height: 50, 
+    width: '100%',
+    backgroundColor: '#34A853',
     justifyContent: 'center', 
-    alignItems: 'center' 
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   buttonText: { 
     color: '#FFF', 
     fontSize: 18, 
-    fontWeight: 'bold' 
+    fontWeight: 'bold', 
+    textAlign: 'center',
   },
   strengthBarBackground: {
-    height: 4,
+    height: 6,
     backgroundColor: '#E0E0E0',
-    borderRadius: 2,
-    marginTop: 15,
+    borderRadius: 4,
+    marginTop: 10,
     width: '100%',
+    overflow: 'hidden',
   },
-  strengthBarFill: {
-    height: 4,
-    backgroundColor: '#FFD700',
-    width: '40%',
-    borderRadius: 2,
+strengthBarFill: {
+    height: '100%',
+    backgroundColor: '#ff0000', 
+    width: '20%', 
+    borderRadius: 4,
+    opacity: 0.8,
   },
 });
