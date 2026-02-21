@@ -1,3 +1,0 @@
-/**
- * Zustand Store
- */
