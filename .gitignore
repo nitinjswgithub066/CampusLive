@@ -45,4 +45,4 @@ app-example
 /android
 .vscode
 /FileStructure.md
-
+.env.example
