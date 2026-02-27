@@ -25,7 +25,6 @@ const NewPaswordCreate: React.FC<Props> = ({ hook }) => {
     setConfirmPassword,
     goBack,
     handleStep3,
-    handleMaybeLater,
     togglePassword,
     toggleConfirmPassword,
   } = hook
@@ -119,16 +118,6 @@ const NewPaswordCreate: React.FC<Props> = ({ hook }) => {
         isLoading={isLoading}
         style={styles.actionBtn}
       />
-
-      {/* ── Maybe Later ── */}
-      {/* Exits recovery flow and returns to login without making changes */}
-      <TouchableOpacity
-        style={styles.maybeLaterRow}
-        onPress={handleMaybeLater}
-        activeOpacity={0.7}
-      >
-        <Text style={styles.maybeLaterText}>Maybe Later</Text>
-      </TouchableOpacity>
 
     </View>
   )

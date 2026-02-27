@@ -14,7 +14,7 @@ import { styles } from '@features/auth/components/styles/RegisterScreenStyle'
 const RegisterScreen = () => {
   return (
     <SafeAreaView
-      style={styles.safeArea}
+      style={[styles.safeArea]}
       edges={['top', 'bottom', 'left', 'right']}
     >
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={false} />
