@@ -1,4 +1,4 @@
-// src/features/auth/components/RegisterStep3.tsx
+// src/features/auth/components/RegisterUserProfile.tsx
 
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
@@ -18,7 +18,7 @@ interface Props {
   hook: ReturnType<typeof useRegister>
 }
 
-const RegisterStep3: React.FC<Props> = ({ hook }) => {
+const RegisterUserProfile: React.FC<Props> = ({ hook }) => {
   const {
     step3,
     errors,
@@ -220,4 +220,4 @@ const RegisterStep3: React.FC<Props> = ({ hook }) => {
   )
 }
 
-export default RegisterStep3
+export default RegisterUserProfile

@@ -1,4 +1,4 @@
-// src/features/auth/components/RegisterStep1.tsx
+// src/features/auth/components/RegisterUserInfo.tsx
 
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
@@ -22,11 +22,12 @@ interface Props {
   hook: ReturnType<typeof useRegister>
 }
 
-const RegisterStep1: React.FC<Props> = ({ hook }) => {
+const RegisterUserInfo: React.FC<Props> = ({ hook }) => {
   const {
     step1,
     errors,
     touched,
+    isLoading,
     updateStep1,
     markTouched,
     goNext,
@@ -107,7 +108,6 @@ const RegisterStep1: React.FC<Props> = ({ hook }) => {
       </View>
 
       {/* ── Gender ── */}
-      {/* Dropdowns fire onChange not onBlur so mark touched on change */}
       <Dropdown
         label="Select Gender"
         options={GENDER_OPTIONS}
@@ -124,6 +124,7 @@ const RegisterStep1: React.FC<Props> = ({ hook }) => {
       <Button
         label="Continue"
         onPress={goNext}
+        isLoading={isLoading}
         style={styles.actionBtn}
       />
 
@@ -131,4 +132,4 @@ const RegisterStep1: React.FC<Props> = ({ hook }) => {
   )
 }
 
-export default RegisterStep1
+export default RegisterUserInfo

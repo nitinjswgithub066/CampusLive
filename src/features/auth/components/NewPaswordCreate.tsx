@@ -10,7 +10,7 @@ interface Props {
   hook: ReturnType<typeof useForgotPassword>
 }
 
-const ForgotStep3: React.FC<Props> = ({ hook }) => {
+const NewPaswordCreate: React.FC<Props> = ({ hook }) => {
   const {
     newPassword,
     confirmPassword,
@@ -135,4 +135,4 @@ const ForgotStep3: React.FC<Props> = ({ hook }) => {
   )
 }
 
-export default ForgotStep3
+export default NewPaswordCreate

@@ -1,46 +1,58 @@
 import { useState, useEffect, useRef } from 'react'
-import { router } from 'expo-router'
-import {getPasswordConditions, isPasswordValid } from '@features/auth/utils/authHelpers'
+import { router, useLocalSearchParams } from 'expo-router'
+import { getPasswordConditions, isPasswordValid } from '@features/auth/utils/authHelpers'
 
-// ─── Timer constants ─────────────────────────────────────────────────────────
+// ─── Timer constant ───────────────────────────────────────────────────────────
 
 const OTP_DURATION_SECONDS = 60
 
-// ─── Hook ────────────────────────────────────────────────────────────────────
+// ─── Hook ─────────────────────────────────────────────────────────────────────
 
 const useForgotPassword = () => {
-  const [currentStep, setCurrentStep]     = useState(1)
+
+  // ── Read URL params ────────────────────────────────────────────────────────
+  // via=mobile means coming from ForgotPasswordMobileScreen
+  // identifier is pre-filled mobile number in that case
+  // step=2 means skip step 1 and land directly on OTP screen
+  const { via, identifier: paramIdentifier, step: paramStep } = useLocalSearchParams<{
+    via?:        string
+    identifier?: string
+    step?:       string
+  }>()
+
+  const [isMobileFlow]    = useState(via === 'mobile')
+
+  // ── Steps ─────────────────────────────────────────────────────────────────
+  const [currentStep, setCurrentStep] = useState(
+    paramStep === '2' ? 2 : 1   // jump to step 2 if coming from mobile screen
+  )
   const totalSteps = 3
 
-  // ── Step 1 ──────────────────────────────────────────────────────────────────
-  const [identifier, setIdentifier]       = useState('')
+  // ── Step 1 ────────────────────────────────────────────────────────────────
+  const [identifier, setIdentifier] = useState(paramIdentifier ?? '')
 
-  // ── Step 2 ──────────────────────────────────────────────────────────────────
-  const [otp, setOtp]                     = useState('')
-  const [secondsLeft, setSecondsLeft]     = useState(OTP_DURATION_SECONDS)
-  const [canResend, setCanResend]         = useState(false)
-  const timerRef                          = useRef<ReturnType<typeof setInterval> | null>(null)
+  // ── Step 2 ────────────────────────────────────────────────────────────────
+  const [otp, setOtp]                 = useState('')
+  const [secondsLeft, setSecondsLeft] = useState(OTP_DURATION_SECONDS)
+  const [canResend, setCanResend]     = useState(false)
+  const timerRef                      = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  // ── Step 3 ──────────────────────────────────────────────────────────────────
+  // ── Step 3 ────────────────────────────────────────────────────────────────
   const [newPassword, setNewPassword]             = useState('')
   const [confirmPassword, setConfirmPassword]     = useState('')
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [isConfirmVisible, setIsConfirmVisible]   = useState(false)
 
-  // ── Shared ──────────────────────────────────────────────────────────────────
-  const [errors, setErrors]               = useState<Record<string, string>>({})
-  const [isLoading, setIsLoading]         = useState(false)
+  // ── Shared ────────────────────────────────────────────────────────────────
+  const [errors, setErrors]   = useState<Record<string, string>>({})
+  const [isLoading, setIsLoading] = useState(false)
 
-  // ─── Timer logic ─────────────────────────────────────────────────────────────
-  // Starts when user reaches step 2. Counts down from 60 to 0.
-  // When it hits 0, resend button becomes active (turns teal).
+  // ─── Timer ────────────────────────────────────────────────────────────────
 
   const startTimer = () => {
     setSecondsLeft(OTP_DURATION_SECONDS)
     setCanResend(false)
-
     if (timerRef.current) clearInterval(timerRef.current)
-
     timerRef.current = setInterval(() => {
       setSecondsLeft((prev) => {
         if (prev <= 1) {
@@ -53,26 +65,29 @@ const useForgotPassword = () => {
     }, 1000)
   }
 
-  // Cleanup timer on unmount
+  // Start timer automatically if landing on step 2 via mobile flow
+  useEffect(() => {
+    if (paramStep === '2') startTimer()
+  }, [])
+
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
     }
   }, [])
 
-  // Format seconds as MM:SS — e.g. 60 → "01:00", 9 → "00:09"
   const formattedTimer = `${String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:${String(secondsLeft % 60).padStart(2, '0')}`
 
-  // ─── Resend OTP ──────────────────────────────────────────────────────────────
+  // ─── Resend OTP ───────────────────────────────────────────────────────────
 
   const handleResend = async () => {
     if (!canResend) return
     setOtp('')
     setErrors({})
-
     try {
       // TODO: Call resend OTP API
-      // await resendOtpMutation({ identifier })
+      // await resendOtpMutation({ identifier, via: isMobileFlow ? 'mobile' : 'email' })
       await new Promise((r) => setTimeout(r, 500))
       startTimer()
     } catch (error: any) {
@@ -80,18 +95,22 @@ const useForgotPassword = () => {
     }
   }
 
-  // ─── Step navigation ─────────────────────────────────────────────────────────
+  // ─── Back navigation ──────────────────────────────────────────────────────
 
-  const goBack = () => {
-    setErrors({})
-    if (currentStep === 1) {
-      router.back()
-    } else {
-      setCurrentStep((prev) => prev - 1)
-    }
+const goBack = () => {
+  setErrors({})
+  if (currentStep === 1) {
+    router.back()
+  } else if (currentStep === 2 && isMobileFlow) {
+    // ── Came from mobile screen → go back to mobile screen ──
+    // Do not decrement step — navigate back in the stack instead
+    router.back()
+  } else {
+    setCurrentStep((prev) => prev - 1)
   }
+}
 
-  // ─── Step 1 submit ───────────────────────────────────────────────────────────
+  // ─── Step 1 submit ────────────────────────────────────────────────────────
 
   const handleStep1 = async () => {
     if (!identifier.trim()) {
@@ -101,12 +120,11 @@ const useForgotPassword = () => {
 
     setIsLoading(true)
     try {
-      // TODO: Call forgot password API
-      // await forgotPasswordMutation({ identifier })
+      // TODO: await forgotPasswordMutation({ identifier })
       await new Promise((r) => setTimeout(r, 1200))
       setErrors({})
       setCurrentStep(2)
-      startTimer()             // start OTP countdown as soon as step 2 opens
+      startTimer()
     } catch (error: any) {
       setErrors({ general: error?.message ?? 'Account not found. Please try again.' })
     } finally {
@@ -114,7 +132,7 @@ const useForgotPassword = () => {
     }
   }
 
-  // ─── Step 2 submit ───────────────────────────────────────────────────────────
+  // ─── Step 2 submit ────────────────────────────────────────────────────────
 
   const handleStep2 = async () => {
     if (otp.trim().length !== 6) {
@@ -124,8 +142,7 @@ const useForgotPassword = () => {
 
     setIsLoading(true)
     try {
-      // TODO: Call verify OTP API
-      // await verifyOtpMutation({ identifier, otp })
+      // TODO: await verifyOtpMutation({ identifier, otp })
       await new Promise((r) => setTimeout(r, 1200))
       setErrors({})
       setCurrentStep(3)
@@ -136,7 +153,7 @@ const useForgotPassword = () => {
     }
   }
 
-  // ─── Step 3 submit ───────────────────────────────────────────────────────────
+  // ─── Step 3 submit ────────────────────────────────────────────────────────
 
   const handleStep3 = async () => {
     const errs: Record<string, string> = {}
@@ -144,7 +161,6 @@ const useForgotPassword = () => {
     if (!isPasswordValid(newPassword)) {
       errs.newPassword = 'Password does not meet all requirements'
     }
-
     if (!confirmPassword) {
       errs.confirmPassword = 'Please confirm your password'
     } else if (newPassword !== confirmPassword) {
@@ -158,8 +174,7 @@ const useForgotPassword = () => {
 
     setIsLoading(true)
     try {
-      // TODO: Call reset password API
-      // await resetPasswordMutation({ identifier, otp, newPassword })
+      // TODO: await resetPasswordMutation({ identifier, otp, newPassword })
       await new Promise((r) => setTimeout(r, 1500))
       router.replace('/(auth)/login')
     } catch (error: any) {
@@ -169,19 +184,18 @@ const useForgotPassword = () => {
     }
   }
 
-  // ─── Maybe Later ─────────────────────────────────────────────────────────────
+  // ─── Maybe Later ──────────────────────────────────────────────────────────
 
   const handleMaybeLater = () => {
     router.replace('/(auth)/login')
   }
 
-  // ─── Password conditions for live checker ────────────────────────────────────
+  // ─── Password conditions ──────────────────────────────────────────────────
 
   const passwordConditions = getPasswordConditions(newPassword)
   const allConditionsMet   = isPasswordValid(newPassword)
 
   return {
-    // state
     currentStep,
     totalSteps,
     identifier,
@@ -197,16 +211,13 @@ const useForgotPassword = () => {
     secondsLeft,
     passwordConditions,
     allConditionsMet,
-
-    // setters
+    isMobileFlow,
     setIdentifier,
     setOtp,
     setNewPassword,
     setConfirmPassword,
     togglePassword:        () => setIsPasswordVisible((p) => !p),
     toggleConfirmPassword: () => setIsConfirmVisible((p) => !p),
-
-    // actions
     goBack,
     handleStep1,
     handleStep2,

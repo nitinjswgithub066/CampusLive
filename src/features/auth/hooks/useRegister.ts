@@ -15,6 +15,8 @@ import type {
   RegisterStep3Values,
 } from '@features/auth/types'
 
+// ─── Initial States ───────────────────────────────────────────────────────────
+
 const INITIAL_STEP1: RegisterStep1Values = {
   fullName:  '',
   dobMonth:  '',
@@ -39,6 +41,8 @@ const INITIAL_STEP3: RegisterStep3Values = {
   confirmPassword: '',
 }
 
+// ─── Hook ─────────────────────────────────────────────────────────────────────
+
 const useRegister = () => {
   const [currentStep, setCurrentStep] = useState(1)
   const totalSteps = 3
@@ -54,10 +58,10 @@ const useRegister = () => {
   const [isPasswordVisible, setIsPasswordVisible]               = useState(false)
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false)
 
-  // ─── Touched state — one object covers all three steps ───────────────────
-  // A field only shows its error after the user has blurred it (onBlur)
-  // or after they tap Continue / Create Account.
-  // On initial load touched is completely empty so nothing is red.
+  // ─── Touched state ────────────────────────────────────────────────────────
+  // Fields only show errors after user has blurred them (onBlur)
+  // or after tapping Continue / Create Account.
+  // On initial load touched is empty so nothing shows red.
 
   const [touched, setTouched] = useState<Record<string, boolean>>({})
 
@@ -65,7 +69,7 @@ const useRegister = () => {
     setTouched((prev) => ({ ...prev, [field]: true }))
   }
 
-  // ─── Field updaters — clear error on change if field was touched ──────────
+  // ─── Field updaters ───────────────────────────────────────────────────────
 
   const updateStep1 = (field: keyof RegisterStep1Values, value: string) => {
     setStep1((prev) => ({ ...prev, [field]: value }))
@@ -92,9 +96,8 @@ const useRegister = () => {
 
   const showInstitution = SHOW_INSTITUTION_FOR.includes(step2.profession)
 
-  // ─── Navigation ───────────────────────────────────────────────────────────
-  // On goNext — mark ALL fields of the current step as touched
-  // so errors show on every unfilled field at once
+  // ─── Mark all fields touched per step ────────────────────────────────────
+  // Called on goNext so all unfilled fields show errors at once
 
   const markAllStep1Touched = () => {
     setTouched((prev) => ({
@@ -128,7 +131,9 @@ const useRegister = () => {
     }))
   }
 
-  const goNext = () => {
+  // ─── goNext — async so isLoading spinner works ────────────────────────────
+
+  const goNext = async () => {
     let validationErrors: Record<string, string> = {}
 
     if (currentStep === 1) {
@@ -145,9 +150,19 @@ const useRegister = () => {
       return
     }
 
-    setErrors({})
-    setCurrentStep((prev) => prev + 1)
+    setIsLoading(true)
+    try {
+      // TODO: Add any async step validation here when backend is ready
+      // e.g. check mobile number or email uniqueness between steps
+      await new Promise((r) => setTimeout(r, 300))   // simulated transition delay
+      setErrors({})
+      setCurrentStep((prev) => prev + 1)
+    } finally {
+      setIsLoading(false)
+    }
   }
+
+  // ─── goBack ───────────────────────────────────────────────────────────────
 
   const goBack = () => {
     setErrors({})
@@ -158,7 +173,7 @@ const useRegister = () => {
     }
   }
 
-  // ─── Submit ───────────────────────────────────────────────────────────────
+  // ─── handleSubmit ─────────────────────────────────────────────────────────
 
   const handleSubmit = async () => {
     markAllStep3Touched()
@@ -186,6 +201,8 @@ const useRegister = () => {
       setIsLoading(false)
     }
   }
+
+  // ─── Return ───────────────────────────────────────────────────────────────
 
   return {
     currentStep,

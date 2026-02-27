@@ -107,7 +107,7 @@ export const styles = StyleSheet.create({
   // ─── Try another way link ─────────────────────────────
   tryAnotherRow: {
     alignItems: 'center',
-    marginTop: Spacing.lg,
+    marginTop: Spacing.xl,
   },
   tryAnotherText: {
     fontSize: FontSize.sm,

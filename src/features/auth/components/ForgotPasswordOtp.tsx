@@ -14,7 +14,7 @@ interface Props {
   hook: ReturnType<typeof useForgotPassword>
 }
 
-const ForgotStep2: React.FC<Props> = ({ hook }) => {
+const ForgotPasswordOtp: React.FC<Props> = ({ hook }) => {
   const {
     otp,
     errors,
@@ -47,7 +47,10 @@ const ForgotStep2: React.FC<Props> = ({ hook }) => {
       {/* ── Line 3: Subtitle ── */}
       <View style={styles.subtitleRow}>
         <Text style={styles.subtitle}>
-          We've sent a unique 6-digit code to your inbox
+          {hook.isMobileFlow
+            ? `We've sent a 6-digit code to +91 ${hook.identifier}`
+            : "Enter the 6-digit code we've sent to your email address"
+          }
         </Text>
       </View>
 
@@ -122,4 +125,4 @@ const ForgotStep2: React.FC<Props> = ({ hook }) => {
   )
 }
 
-export default ForgotStep2
+export default ForgotPasswordOtp

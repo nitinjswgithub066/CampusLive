@@ -1,0 +1,2 @@
+import RecoveryOptionsScreen from '@features/auth/components/RecoveryOptionsScreen'
+export default RecoveryOptionsScreen

@@ -1,4 +1,4 @@
-// src/features/auth/components/RegisterStep2.tsx
+// src/features/auth/components/RegisterContact.tsx
 
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
@@ -15,11 +15,12 @@ interface Props {
   hook: ReturnType<typeof useRegister>
 }
 
-const RegisterStep2: React.FC<Props> = ({ hook }) => {
+const RegisterContact: React.FC<Props> = ({ hook }) => {
   const {
     step2,
     errors,
     touched,
+    isLoading,
     updateStep2,
     markTouched,
     goNext,
@@ -67,7 +68,7 @@ const RegisterStep2: React.FC<Props> = ({ hook }) => {
         error={touched.profession ? errors.profession : undefined}
       />
 
-      {/* ── Institution Name ── */}
+      {/* ── Institution Name — only for student / ug_pg ── */}
       {showInstitution && (
         <>
           <Input
@@ -78,11 +79,6 @@ const RegisterStep2: React.FC<Props> = ({ hook }) => {
             error={touched.institutionName ? errors.institutionName : undefined}
             autoCapitalize="words"
           />
-          {/*
-           * TODO: Institution Registration Redirect
-           * router.push('/(auth)/register-institution')
-           * See RegisterStep2 comments for full implementation options
-           */}
           <TouchableOpacity
             onPress={() => {
               // TODO: router.push('/(auth)/register-institution')
@@ -131,6 +127,7 @@ const RegisterStep2: React.FC<Props> = ({ hook }) => {
       <Button
         label="Continue"
         onPress={goNext}
+        isLoading={isLoading}
         style={styles.actionBtn}
       />
 
@@ -138,4 +135,4 @@ const RegisterStep2: React.FC<Props> = ({ hook }) => {
   )
 }
 
-export default RegisterStep2
+export default RegisterContact

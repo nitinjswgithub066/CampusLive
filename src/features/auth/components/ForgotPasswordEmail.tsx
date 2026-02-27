@@ -4,12 +4,13 @@ import { Input } from '@shared/components/ui/Input'
 import { Button } from '@shared/components/ui/Button'
 import { styles } from '@features/auth/components/styles/ForgotPasswordFormStyle'
 import useForgotPassword from '@features/auth/hooks/useForgotPassword'
+import { router } from 'expo-router'
 
 interface Props {
   hook: ReturnType<typeof useForgotPassword>
 }
 
-const ForgotStep1: React.FC<Props> = ({ hook }) => {
+const ForgotPasswordEmail: React.FC<Props> = ({ hook }) => {
   const {
     identifier,
     errors,
@@ -71,8 +72,7 @@ const ForgotStep1: React.FC<Props> = ({ hook }) => {
       <TouchableOpacity
         style={styles.tryAnotherRow}
         onPress={() => {
-          // TODO: router.push('/(auth)/phone-recovery')
-          // Phone-based recovery screen — to be built when backend is ready
+          router.push('/(auth)/recovery-options' as any)
         }}
         activeOpacity={0.7}
       >
@@ -83,4 +83,4 @@ const ForgotStep1: React.FC<Props> = ({ hook }) => {
   )
 }
 
-export default ForgotStep1
+export default ForgotPasswordEmail
