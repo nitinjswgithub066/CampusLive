@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
   otpBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.backgroundInput,
+    backgroundColor: Colors.backgroundCard,
     borderRadius: Radius.lg,
     borderWidth: 1.5,
     borderColor: Colors.border,

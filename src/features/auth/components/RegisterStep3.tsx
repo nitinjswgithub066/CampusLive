@@ -10,6 +10,7 @@ import { styles as inputStyles } from '@shared/components/ui/style/InputStyle'
 import {
   getPasswordConditions,
   isPasswordValid,
+  type PasswordCondition,
 } from '@features/auth/utils/authHelpers'
 import useRegister from '@features/auth/hooks/useRegister'
 
@@ -21,21 +22,25 @@ const RegisterStep3: React.FC<Props> = ({ hook }) => {
   const {
     step3,
     errors,
+    touched,
     isLoading,
     isPasswordVisible,
     isConfirmPasswordVisible,
+    isTermsAccepted,
     updateStep3,
+    markTouched,
     goBack,
     handleSubmit,
     togglePassword,
     toggleConfirmPassword,
+    setIsTermsAccepted,
+    clearError,
     currentStep,
     totalSteps,
   } = hook
 
-  // ── Live password conditions — hides when all are met ──
-  const passwordConditions = getPasswordConditions(step3.password)
-  const allConditionsMet   = isPasswordValid(step3.password)
+  const passwordConditions: PasswordCondition[] = getPasswordConditions(step3.password)
+  const allConditionsMet = isPasswordValid(step3.password)
 
   return (
     <View>
@@ -49,7 +54,7 @@ const RegisterStep3: React.FC<Props> = ({ hook }) => {
 
       {/* ── Line 2: Heading ── */}
       <View style={styles.titleRow}>
-        <Text style={styles.pageTitle}>Public Identity 🧑‍🎤</Text>
+        <Text style={styles.pageTitle}>Make It Yours ✨</Text>
         <Text style={styles.pageSubtitle}>
           Final step: Set your identity and secure your account.
         </Text>
@@ -70,64 +75,29 @@ const RegisterStep3: React.FC<Props> = ({ hook }) => {
       )}
 
       {/* ── Display Name ── */}
-      {/* Condition: letters, numbers, and underscores. Must have at least one letter */}
       <Input
         placeholder="Profile Display Name"
         value={step3.displayName}
         onChangeText={(v) => updateStep3('displayName', v)}
-        error={errors.displayName}
+        onBlur={() => markTouched('displayName')}
+        error={touched.displayName ? errors.displayName : undefined}
         autoCapitalize="none"
         autoCorrect={false}
       />
 
-      {/* ── Username with @ prefix — only lowercase, numbers, underscores ── */}
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={{ color: '#6B6B6B', fontSize: 16, fontWeight: '600', marginRight: 8 }}>
-          @
-        </Text>
-        <View style={{ flex: 1 }}>
-          <Input
-            placeholder="username"
-            value={step3.username}
-            onChangeText={(v) => updateStep3('username', v.toLowerCase())}
-            error={errors.username}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-        </View>
-      </View>
+      {/* ── Username with @ prefix ── */}
+      <Input
+        placeholder="username"
+        value={step3.username}
+        onChangeText={(v) => updateStep3('username', v.toLowerCase())}
+        onBlur={() => markTouched('username')}
+        error={touched.username ? errors.username : undefined}
+        autoCapitalize="none"
+        autoCorrect={false}
+        leftIcon={<Text style={inputStyles.prefixText}>@</Text>}
+      />
 
-      {/*
-       * ── Streaming ID / User ID (Auto Generated) ────────────────────────────
-       *
-       * HEADING: "Your Campus Live ID"
-       *
-       * Currently this ID is generated randomly on the client side using
-       * generateStreamingId() in authHelpers.ts (format: CL-XXXXXX).
-       *
-       * HOW TO CHANGE THIS WHEN BACKEND IS CONNECTED:
-       *
-       * Option 1 — Backend generates it on register API call:
-       *   - Remove generateStreamingId() from useRegister hook
-       *   - The backend returns the streamingId in the register response
-       *   - Set it in the store: setUser({ ...user, streamingId: response.streamingId })
-       *   - Show it on a success screen after registration
-       *
-       * Option 2 — Generate on the client, backend validates uniqueness:
-       *   - Keep generateStreamingId() on the client
-       *   - Send it to backend with the register payload
-       *   - Backend checks if it already exists in DB
-       *   - If duplicate, backend returns a new one
-       *   - Update local state with the backend-confirmed ID
-       *
-       * Option 3 — Use UUID from backend (recommended for production):
-       *   - Backend generates a UUID or nanoid
-       *   - Format it as CL-XXXXXX on the backend before returning
-       *   - This guarantees global uniqueness across all users
-       *
-       * TO IMPLEMENT: Replace the streamingIdBox below with the
-       * backend-confirmed value from the register API response.
-       */}
+      {/* ── Streaming ID ── */}
       <Text style={styles.sectionLabel}>Your Campus Live ID</Text>
       <View style={styles.streamingIdWrapper}>
         <View style={styles.streamingIdBox}>
@@ -143,7 +113,8 @@ const RegisterStep3: React.FC<Props> = ({ hook }) => {
         placeholder="Password"
         value={step3.password}
         onChangeText={(v) => updateStep3('password', v)}
-        error={errors.password}
+        onBlur={() => markTouched('password')}
+        error={touched.password ? errors.password : undefined}
         secureTextEntry={!isPasswordVisible}
         rightIcon={
           <Text style={inputStyles.eyeText}>
@@ -153,26 +124,19 @@ const RegisterStep3: React.FC<Props> = ({ hook }) => {
         onRightIconPress={togglePassword}
       />
 
-      {/* ── Live Password Conditions ──────────────────────────────────────────
-          Shows while user is typing. Disappears automatically when all
-          conditions are met. Each condition turns teal + checkmark when fulfilled.
-      */}
+      {/* ── Live Password Conditions ── */}
       {step3.password.length > 0 && !allConditionsMet && (
         <View style={styles.conditionsContainer}>
           <Text style={styles.conditionsTitle}>Password must have:</Text>
-          {passwordConditions.map((condition: { met: any; label: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined }, index: number) => (
+          {passwordConditions.map((condition: PasswordCondition, index: number) => (
             <View key={index} style={styles.conditionRow}>
               <Text style={styles.conditionIcon}>
                 {condition.met ? '✓' : '○'}
               </Text>
-              <Text
-                style={[
-                  styles.conditionText,
-                  condition.met
-                    ? styles.conditionMet
-                    : styles.conditionUnmet,
-                ]}
-              >
+              <Text style={[
+                styles.conditionText,
+                condition.met ? styles.conditionMet : styles.conditionUnmet,
+              ]}>
                 {condition.label}
               </Text>
             </View>
@@ -185,7 +149,8 @@ const RegisterStep3: React.FC<Props> = ({ hook }) => {
         placeholder="Confirm Password"
         value={step3.confirmPassword}
         onChangeText={(v) => updateStep3('confirmPassword', v)}
-        error={errors.confirmPassword}
+        onBlur={() => markTouched('confirmPassword')}
+        error={touched.confirmPassword ? errors.confirmPassword : undefined}
         secureTextEntry={!isConfirmPasswordVisible}
         rightIcon={
           <Text style={inputStyles.eyeText}>
@@ -194,6 +159,54 @@ const RegisterStep3: React.FC<Props> = ({ hook }) => {
         }
         onRightIconPress={toggleConfirmPassword}
       />
+
+      {/* ── Terms & Conditions ── */}
+      <TouchableOpacity
+        style={styles.termsRow}
+        onPress={() => {
+          setIsTermsAccepted(!isTermsAccepted)
+          clearError('terms')
+        }}
+        activeOpacity={0.8}
+      >
+        <View style={[
+          styles.checkbox,
+          isTermsAccepted && styles.checkboxChecked,
+          (touched.terms && errors.terms && !isTermsAccepted)
+            ? styles.checkboxError
+            : null,
+        ]}>
+          {isTermsAccepted && (
+            <Text style={styles.checkboxTick}>✓</Text>
+          )}
+        </View>
+
+        <Text style={styles.termsText}>
+          I agree to the{' '}
+          <Text
+            style={styles.termsLink}
+            onPress={() => {
+              // TODO: router.push('/(app)/terms-and-conditions')
+            }}
+          >
+            Terms & Conditions
+          </Text>
+          {' '}and{' '}
+          <Text
+            style={styles.termsLink}
+            onPress={() => {
+              // TODO: router.push('/(app)/privacy-policy')
+            }}
+          >
+            Privacy Policy
+          </Text>
+        </Text>
+      </TouchableOpacity>
+
+      {/* Terms error — only shows after submit attempt */}
+      {touched.terms && errors.terms && (
+        <Text style={styles.termsErrorText}>{errors.terms}</Text>
+      )}
 
       {/* ── Create Account ── */}
       <Button

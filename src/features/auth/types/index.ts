@@ -1,6 +1,6 @@
 // For authentication related types
 
-export type UserRole = 'viewer' | 'streamer'
+export type UserRole = 'viewer'
 
 export interface LoginFormValues {
   identifier: string        // accepts username, email or mobile number
@@ -45,7 +45,7 @@ export interface ForgotPasswordValues {
 
 // For registration step 1
 
-export type GenderType = 'male' | 'female' | 'other' | 'prefer_not_to_say'
+export type GenderType = 'male' | 'female' | 'other'
 
 export type UserProfession =
   | 'student'
@@ -59,7 +59,7 @@ export interface RegisterStep1Values {
   dobMonth: string
   dobDay: string
   dobYear: string
-  gender: string
+  gender: GenderType | ''  // allow empty string for initial state
 }
 
 export interface RegisterStep2Values {

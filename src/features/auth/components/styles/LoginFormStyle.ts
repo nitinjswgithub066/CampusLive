@@ -1,3 +1,5 @@
+// src/features/auth/components/styles/LoginFormStyle.ts
+
 import { StyleSheet, Dimensions } from 'react-native'
 import Colors from '@constants/colors'
 import { FontSize, Spacing, Radius } from '@constants/theme'
@@ -7,22 +9,50 @@ export const LOGO_SIZE = width * 0.22
 
 export const styles = StyleSheet.create({
 
-  // ─── Language Selector ────────────────────────────────
-  languageDropdown: {
-    width: undefined,
-    paddingBottom: 0,
+  // ─── Rule 3: Root container ───────────────────────────
+  // flex: 1 fills the ScrollView
+  // This is the full-height column that holds topZone, spacer, bottomZone
+  container: {
+    flex: 1,
+    minHeight: '100%',         // ensures spacer works even on short screens
   },
-    languageRow: {
+
+  // ─── Top zone ─────────────────────────────────────────
+  // Contains language, logo, inputs, login button, forgot
+  topZone: {
+    width: '100%',
+  },
+
+  // ─── Flex spacer ──────────────────────────────────────
+  // Pushes bottom zone to the bottom like flex-grow in CSS
+  spacer: {
+    flex: 1,
+    minHeight: Spacing.xl,     // minimum gap even on very short screens
+  },
+
+  // ─── Bottom zone ──────────────────────────────────────
+  // Divider + create account — always anchored to bottom
+  bottomZone: {
+    width: '100%',
+    paddingBottom: Spacing.md,
+  },
+
+  // ─── Language Selector ────────────────────────────────
+  languageRow: {
     width: '100%',
     alignItems: 'center',
-    marginTop: Spacing.md,
-    marginBottom: Spacing.xxl,
+    marginTop: Spacing.sm,
+    marginBottom: Spacing.lg,
+  },
+  languageDropdown: {
+    width: undefined,
+    marginBottom: 0,
   },
 
   // ─── Brand Section ────────────────────────────────────
   brandSection: {
     alignItems: 'center',
-    marginBottom: Spacing.xxl,
+    marginBottom: Spacing.xl,
   },
   logoCircle: {
     width: LOGO_SIZE,
@@ -40,40 +70,36 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
 
-  // ─── Aperture Segments ────────────────────────────────
+  // ─── Aperture segments ────────────────────────────────
   segment: {
     position: 'absolute',
     width: '50%',
     height: '50%',
   },
   segTL: {
-    top: 0,
-    left: 0,
+    top: 0, left: 0,
     backgroundColor: Colors.teal,
     borderBottomRightRadius: LOGO_SIZE * 0.15,
   },
   segTR: {
-    top: 0,
-    right: 0,
+    top: 0, right: 0,
     backgroundColor: Colors.limeGreen,
     borderBottomLeftRadius: LOGO_SIZE * 0.15,
   },
   segBR: {
-    bottom: 0,
-    right: 0,
+    bottom: 0, right: 0,
     backgroundColor: Colors.teal,
     opacity: 0.85,
     borderTopLeftRadius: LOGO_SIZE * 0.15,
   },
   segBL: {
-    bottom: 0,
-    left: 0,
+    bottom: 0, left: 0,
     backgroundColor: Colors.limeGreenDark,
     opacity: 0.9,
     borderTopRightRadius: LOGO_SIZE * 0.15,
   },
 
-  // ─── Play Button ──────────────────────────────────────
+  // ─── Play button ──────────────────────────────────────
   playCenter: {
     width: LOGO_SIZE * 0.36,
     height: LOGO_SIZE * 0.36,
@@ -95,10 +121,11 @@ export const styles = StyleSheet.create({
     marginLeft: LOGO_SIZE * 0.03,
   },
 
-  // ─── Brand Name ───────────────────────────────────────
+  // ─── Brand name ───────────────────────────────────────
   brandRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
+    paddingBottom: Spacing.sm,
   },
   brandCampus: {
     fontSize: FontSize.xl,
@@ -113,7 +140,7 @@ export const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
 
-  // ─── General Error Banner ─────────────────────────────
+  // ─── General error banner ─────────────────────────────
   generalError: {
     backgroundColor: `${Colors.error}15`,
     borderRadius: Radius.md,
@@ -128,11 +155,11 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  // ─── Forgot Password ──────────────────────────────────
+  // ─── Forgot password ──────────────────────────────────
   forgotContainer: {
     alignItems: 'center',
+    paddingVertical: Spacing.md,
     marginTop: Spacing.md,
-    paddingVertical: Spacing.sm,
   },
   forgotText: {
     color: Colors.textMuted,
@@ -144,7 +171,8 @@ export const styles = StyleSheet.create({
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: Spacing.xl,
+    marginTop: Spacing.xxl,
+    marginBottom: Spacing.xxl, 
   },
   dividerLine: {
     flex: 1,
@@ -156,10 +184,12 @@ export const styles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.sm,
   },
-
+  // ─── Eye icon text ────────────────────────────────────
   eyeText: {
-    fontSize: FontSize.md,
+    fontSize: FontSize.xs,
     fontWeight: '600',
     color: Colors.teal,
+    letterSpacing: 0.3,
   },
+
 })

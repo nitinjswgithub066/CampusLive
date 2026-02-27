@@ -18,6 +18,7 @@ interface UserStore {
   isLoggedIn: () => boolean
   isStreamer: () => boolean
   getProfileId: () => string | null
+  
 }
 
 // ─── Store ───────────────────────────────────────────────────────────────────

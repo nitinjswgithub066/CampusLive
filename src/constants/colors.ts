@@ -8,7 +8,7 @@ const Colors = {
 
   // Backgrounds
   textWhite: '#F5F4F0',       
-  backgroundCard: '#FFFFFF',
+  backgroundCard: '#fdfdfd',
   backgroundInput: '#EDEDEA',
 
   // Text

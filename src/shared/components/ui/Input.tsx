@@ -14,6 +14,7 @@ interface InputProps extends TextInputProps {
   error?: string
   rightIcon?: React.ReactNode
   onRightIconPress?: () => void
+  leftIcon?: React.ReactNode
   containerStyle?: ViewStyle
 }
 
@@ -23,13 +24,15 @@ export const Input: React.FC<InputProps> = ({
   onRightIconPress,
   containerStyle,
   style,
+  leftIcon,
   ...props
 }) => {
   return (
     <View style={[styles.wrapper, containerStyle]}>
       <View style={[styles.inputRow, error ? styles.inputError : null]}>
+        {leftIcon && (<View style={styles.leftIconWrapper}>{leftIcon}</View>)}
         <TextInput
-          style={[styles.input, style]}
+          style={[styles.input, leftIcon ? styles.inputWithLeftIcon : null, style]}
           placeholderTextColor={Colors.textMuted}
           {...props}
         />

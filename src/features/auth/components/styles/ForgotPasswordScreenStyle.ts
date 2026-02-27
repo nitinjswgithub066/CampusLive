@@ -5,7 +5,7 @@ import { Spacing } from '@constants/theme'
 export const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: Colors.backgroundInput,
+    backgroundColor: Colors.backgroundCard,
   },
   scroll: {
     flexGrow: 1,

@@ -23,14 +23,14 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.textWhite,
+    backgroundColor: Colors.backgroundCard,
     borderRadius: Radius.lg,
     borderWidth: 1.5,
     borderColor: Colors.border,
     height: 52,
     paddingHorizontal: Spacing.md,
   },
-    triggerTransparent: {
+  triggerTransparent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -40,16 +40,16 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   triggerTextGhost: {
-  fontSize: FontSize.md,
-  color: Colors.textPrimary,
-  textAlign: 'center', 
+    fontSize: FontSize.md,
+    color: Colors.textPrimary,
+    textAlign: 'center',
   },
   triggerText: {
     fontSize: FontSize.md,
     color: Colors.textPrimary,
     flex: 1,
   },
-    triggerError: {
+  triggerError: {
     borderColor: Colors.error,
     borderWidth: 1.5,
   },

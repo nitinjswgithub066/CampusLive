@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.backgroundInput,
+    backgroundColor: Colors.backgroundCard,
     borderRadius: Radius.lg,
     borderWidth: 1.5,
     borderColor: Colors.border,
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   dropdownList: {
-    backgroundColor: Colors.textWhite,
+    backgroundColor: Colors.backgroundCard,
     borderRadius: Radius.md,
     borderWidth: 1,
     borderColor: Colors.border,

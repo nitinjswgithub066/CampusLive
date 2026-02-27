@@ -1,3 +1,5 @@
+// src/features/auth/components/RegisterStep2.tsx
+
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Input } from '@shared/components/ui/Input'
@@ -17,7 +19,9 @@ const RegisterStep2: React.FC<Props> = ({ hook }) => {
   const {
     step2,
     errors,
+    touched,
     updateStep2,
+    markTouched,
     goNext,
     goBack,
     showInstitution,
@@ -37,7 +41,7 @@ const RegisterStep2: React.FC<Props> = ({ hook }) => {
 
       {/* ── Line 2: Heading ── */}
       <View style={styles.titleRow}>
-        <Text style={styles.pageTitle}>Professional Profile 🧑‍💼</Text>
+        <Text style={styles.pageTitle}>Your World 🌍</Text>
         <Text style={styles.pageSubtitle}>
           Tell us what you do and how we can find you.
         </Text>
@@ -50,48 +54,34 @@ const RegisterStep2: React.FC<Props> = ({ hook }) => {
         </View>
       </View>
 
-      {/* ── Profession — eye-catching label ── */}
+      {/* ── Profession ── */}
       <Dropdown
         label="What best describes you? ✦"
         options={PROFESSION_OPTIONS}
         value={step2.profession}
-        onChange={(opt: DropdownOption) => updateStep2('profession', opt.value)}
+        onChange={(opt: DropdownOption) => {
+          updateStep2('profession', opt.value)
+          markTouched('profession')
+        }}
         placeholder="Select your background"
-        error={errors.profession}
+        error={touched.profession ? errors.profession : undefined}
       />
 
-      {/* ── Institution Name — shown only for student / ug_pg ── */}
+      {/* ── Institution Name ── */}
       {showInstitution && (
         <>
           <Input
             placeholder="Institution Name"
             value={step2.institutionName}
             onChangeText={(v) => updateStep2('institutionName', v)}
-            error={errors.institutionName}
+            onBlur={() => markTouched('institutionName')}
+            error={touched.institutionName ? errors.institutionName : undefined}
             autoCapitalize="words"
           />
           {/*
            * TODO: Institution Registration Redirect
-           * If the user's institution is not listed or not yet registered
-           * on Campus Live, redirect them to register their institution.
-           *
-           * Options to implement this:
-           * 1. Add a "Register your institution" text link below this input
-           *    that navigates to: router.push('/(auth)/register-institution')
-           *
-           * 2. After the user types the name and it does not match
-           *    any institution in your database (via API search),
-           *    show a suggestion: "Institution not found. Register it here →"
-           *
-           * 3. Build a separate InstitutionRegisterScreen with:
-           *    - Institution name
-           *    - Type (college / school / university)
-           *    - City and state
-           *    - Official email domain (e.g. @iitb.ac.in)
-           *    - Admin contact
-           *
-           * The registered institution then goes through an approval flow
-           * on your admin panel before being visible to other users.
+           * router.push('/(auth)/register-institution')
+           * See RegisterStep2 comments for full implementation options
            */}
           <TouchableOpacity
             onPress={() => {
@@ -119,7 +109,8 @@ const RegisterStep2: React.FC<Props> = ({ hook }) => {
         placeholder="Mobile Number"
         value={step2.mobileNumber}
         onChangeText={(v) => updateStep2('mobileNumber', v)}
-        error={errors.mobileNumber}
+        onBlur={() => markTouched('mobileNumber')}
+        error={touched.mobileNumber ? errors.mobileNumber : undefined}
         keyboardType="phone-pad"
         maxLength={10}
       />
@@ -129,7 +120,8 @@ const RegisterStep2: React.FC<Props> = ({ hook }) => {
         placeholder="Email"
         value={step2.email}
         onChangeText={(v) => updateStep2('email', v)}
-        error={errors.email}
+        onBlur={() => markTouched('email')}
+        error={touched.email ? errors.email : undefined}
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}

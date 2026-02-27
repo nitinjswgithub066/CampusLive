@@ -1,30 +1,38 @@
+// src/features/auth/components/LoginScreen.tsx
+
 import React from 'react'
 import {
-  ScrollView,
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  ScrollView,
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import LoginForm from '@features/auth/components/LoginForm'
 import { styles } from '@features/auth/components/styles/LoginScreenStyle'
 
 const LoginScreen = () => {
   return (
-    <KeyboardAvoidingView
-      style={styles.root}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    <SafeAreaView
+      style={styles.safeArea}
+      edges={['top', 'bottom', 'left', 'right']}
     >
-      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={false} />
 
-      <ScrollView
-        contentContainerStyle={styles.scroll}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
+      <KeyboardAvoidingView
+        style={styles.root}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <LoginForm />
-      </ScrollView>
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <LoginForm />
+        </ScrollView>
+      </KeyboardAvoidingView>
 
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }
 

@@ -10,19 +10,18 @@ import useRegister from '@features/auth/hooks/useRegister'
 import { styles } from '@features/auth/components/styles/RegisterFormStyle'
 
 const RegisterForm = () => {
-  // ── Single hook instance — passed down to each step ──
-  // This is the singleton pattern — one source of truth for all 3 steps
   const hook = useRegister()
 
   return (
-    <View>
+    // flex: 1 + minHeight: '100%' ensures the form fills the ScrollView
+    // so Continue button is never floating in the middle on tall screens
+    <View style={styles.formContainer}>
 
-      {/* ── Render step based on currentStep ── */}
       {hook.currentStep === 1 && <RegisterStep1 hook={hook} />}
       {hook.currentStep === 2 && <RegisterStep2 hook={hook} />}
       {hook.currentStep === 3 && <RegisterStep3 hook={hook} />}
 
-      {/* ── Already have account — shown on step 1 only ── */}
+      {/* ── Already have account — step 1 only ── */}
       {hook.currentStep === 1 && (
         <View style={styles.loginRow}>
           <Text style={styles.loginText}>Already have an account?</Text>

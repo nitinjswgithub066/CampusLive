@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.textWhite,
+    backgroundColor: Colors.backgroundCard,
     borderRadius: Radius.lg,
     borderWidth: 1.5,
     borderColor: Colors.border,
@@ -46,4 +46,21 @@ export const styles = StyleSheet.create({
     marginTop: Spacing.xs,
     marginLeft: Spacing.xs,
   },
+    prefixText: {
+    fontSize: FontSize.md,
+    color: Colors.textSecondary,
+    fontWeight: '600',
+    paddingRight: Spacing.xs,
+    borderRightWidth: 1,
+    borderRightColor: Colors.border,
+    marginRight: Spacing.xs,
+  },
+  leftIconWrapper: {
+  marginRight: Spacing.xs,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+inputWithLeftIcon: {
+  flex: 1,
+},
 })

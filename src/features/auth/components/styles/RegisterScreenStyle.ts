@@ -1,18 +1,27 @@
-import { StyleSheet, Platform, StatusBar } from 'react-native'
+// src/features/auth/components/styles/RegisterScreenStyle.ts
+
+import { StyleSheet } from 'react-native'
 import Colors from '@constants/colors'
 import { Spacing } from '@constants/theme'
 
 export const styles = StyleSheet.create({
+
+  // SafeAreaView — handles top and bottom system bars automatically
+  safeArea: {
+    flex: 1,
+    backgroundColor: Colors.backgroundCard,
+  },
+
+  // KeyboardAvoidingView
   root: {
     flex: 1,
-    backgroundColor: Colors.backgroundInput,
   },
+
+  // ScrollView contentContainerStyle
+  // No manual paddingTop — SafeAreaView handles the status bar inset
   scroll: {
-    flexGrow: 1,
     paddingHorizontal: Spacing.lg,
-    paddingTop: Platform.OS === 'android'
-      ? (StatusBar.currentHeight ?? 24) + Spacing.md
-      : Spacing.xl,
-    paddingBottom: Spacing.xxl,
+    paddingTop: Spacing.md,
+    paddingBottom: 0,
   },
 })

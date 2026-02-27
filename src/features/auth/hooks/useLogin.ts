@@ -1,125 +1,138 @@
+// src/features/auth/hooks/useLogin.ts
+
 import { useState } from 'react'
 import { router } from 'expo-router'
 import { useUserStore } from '@store/useStore'
 import { validateLoginForm, detectIdentifierType } from '@features/auth/utils/authHelpers'
 import type { LoginFormValues, UserRole } from '@features/auth/types'
 
-// ─── Initial State ───────────────────────────────────────────────────────────
+const DUMMY_CREDENTIALS = {
+  email:    'admin@campuslive.com',
+  password: 'Admin@123',
+}
 
 const INITIAL_FORM: LoginFormValues = {
   identifier: '',
-  password: '',
-  role: 'viewer',
+  password:   '',
+  role:       'viewer',
 }
-
-// ─── Hook ────────────────────────────────────────────────────────────────────
 
 const useLogin = () => {
   const { setUser } = useUserStore()
 
-  const [formValues, setFormValues] = useState<LoginFormValues>(INITIAL_FORM)
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [isLoading, setIsLoading] = useState(false)
+  const [formValues, setFormValues]           = useState<LoginFormValues>(INITIAL_FORM)
+  const [errors, setErrors]                   = useState<Record<string, string>>({})
+  const [isLoading, setIsLoading]             = useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
-  // ─── Field Updater ─────────────────────────────────────────────────────────
-  // Updates a single field and clears its error on change
+  // ─── Touched state ────────────────────────────────────────────────────────
+  // A field is only validated after the user has interacted with it (onBlur)
+  // or after they attempt to submit the form.
+  // On initial load touched is empty so no errors show at all.
+
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
+
+  const markTouched = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }))
+
+    // Validate this single field on blur
+    const currentErrors = validateLoginForm(formValues.identifier, formValues.password)
+    setErrors((prev) => ({
+      ...prev,
+      [field]: currentErrors[field] ?? '',
+    }))
+  }
+
+  // ─── Field updater ────────────────────────────────────────────────────────
+  // Clears the error for a field as the user starts typing again
 
   const updateField = (field: keyof LoginFormValues, value: string) => {
     setFormValues((prev) => ({ ...prev, [field]: value }))
-    if (errors[field]) {
+    if (touched[field]) {
       setErrors((prev) => ({ ...prev, [field]: '' }))
     }
   }
-
-  // ─── Role Setter ───────────────────────────────────────────────────────────
 
   const setRole = (role: UserRole) => {
     setFormValues((prev) => ({ ...prev, role }))
   }
 
-  // ─── Password Visibility ───────────────────────────────────────────────────
-
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible((prev) => !prev)
-  }
-
-  // ─── Form Reset ────────────────────────────────────────────────────────────
+  const togglePasswordVisibility = () => setIsPasswordVisible((prev) => !prev)
 
   const resetForm = () => {
     setFormValues(INITIAL_FORM)
     setErrors({})
+    setTouched({})
     setIsPasswordVisible(false)
   }
 
-  // ─── Submit ────────────────────────────────────────────────────────────────
+  // ─── Submit ───────────────────────────────────────────────────────────────
+  // Marks all fields as touched so errors show on every field at once
 
   const handleLogin = async () => {
-    // 1. Validate form — if errors exist, show them and stop
+    // Mark all fields touched on submit attempt
+    setTouched({ identifier: true, password: true })
+
     const validationErrors = validateLoginForm(formValues.identifier, formValues.password)
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
       return
     }
 
-    // 2. Detect what type of identifier the user typed
-    //    Sends this info to backend so it knows which DB field to query
     const identifierType = detectIdentifierType(formValues.identifier)
-
     setIsLoading(true)
 
     try {
-      // 3. TODO: Replace this block with your real API call
-      //    const response = await loginMutation({
-      //      identifier: formValues.identifier,
-      //      identifierType,
-      //      password: formValues.password,
-      //      role: formValues.role,
-      //    })
-      //    setUser(response.user)
-
-      // ── Simulated API call for now ──
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      setUser({
-        id: '1',
-        profileId: 'profile_001',
-        username: formValues.identifier,
-        email: identifierType === 'email' ? formValues.identifier : '',
-        mobileNumber: identifierType === 'mobile' ? formValues.identifier : '',
-        avatarUrl: '',
-        isStreamer: formValues.role === 'streamer',
-        isLoggedIn: true,
-        role: formValues.role,
-      })
+      const enteredIdentifier = formValues.identifier.trim().toLowerCase()
+      const isEmailMatch =
+        identifierType === 'email' &&
+        enteredIdentifier === DUMMY_CREDENTIALS.email.toLowerCase()
+      const isUsernameMatch =
+        identifierType === 'username' &&
+        enteredIdentifier === DUMMY_CREDENTIALS.email.split('@')[0].toLowerCase()
 
-      // 4. Navigate based on role after successful login
-      if (formValues.role === 'streamer') {
-        router.replace('/(app)/(tabs)' as any) // Replace with your streamer's main route
-      } else {
-        router.replace('/(app)/(tabs)' as any) // Replace with your viewer's main route
+      if (!isEmailMatch && !isUsernameMatch) {
+        setErrors({ identifier: 'No account found with this email, username or mobile number' })
+        return
       }
 
+      if (formValues.password !== DUMMY_CREDENTIALS.password) {
+        setErrors({ password: 'Incorrect password. Please try again.' })
+        return
+      }
+
+      setUser({
+        id:           '1',
+        profileId:    'profile_001',
+        username:     formValues.identifier,
+        email:        identifierType === 'email' ? formValues.identifier : '',
+        mobileNumber: '',
+        avatarUrl:    '',
+        isLoggedIn:   true,
+        role:         formValues.role,
+        isStreamer:   false,
+      })
+
       resetForm()
+      router.replace('/(app)/(tabs)' as any)
 
     } catch (error: any) {
-      // 5. Show backend error message if available, otherwise show generic
-      setErrors({
-        general: error?.message ?? 'Invalid credentials. Please try again.',
-      })
+      setErrors({ general: error?.message ?? 'Something went wrong. Please try again.' })
     } finally {
       setIsLoading(false)
     }
   }
 
-  // ─── Return ────────────────────────────────────────────────────────────────
-
   return {
     formValues,
     errors,
+    touched,
     isLoading,
     isPasswordVisible,
     updateField,
+    markTouched,
     setRole,
     handleLogin,
     togglePasswordVisibility,

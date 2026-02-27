@@ -36,7 +36,6 @@ export const GENDER_OPTIONS: DropdownOption[] = [
   { label: 'Male', value: 'male' },
   { label: 'Female', value: 'female' },
   { label: 'Other', value: 'other' },
-  { label: 'Prefer not to say', value: 'prefer_not_to_say' },
 ]
 
 // ─── Month Options ────────────────────────────────────────────────────────────
@@ -141,19 +140,19 @@ export const validateUsername = (username: string): string => {
 // Private — only used inside this file via validatePassword()
 
 const PASSWORD_RULES = {
-  hasUppercase:    /[A-Z]/,
-  hasLowercase:    /[a-z]/,
-  hasNumber:       /[0-9]/,
-  hasSpecialChar:  /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
+  hasUppercase: /[A-Z]/,
+  hasLowercase: /[a-z]/,
+  hasNumber: /[0-9]/,
+  hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
 }
 
 // Used internally for form submit validation (login + register step 3)
 const validatePassword = (password: string): string => {
-  if (!password)          return 'Password is required'
+  if (!password) return 'Password is required'
   if (password.length <= 6) return 'Password must be greater than 6 characters'
-  if (!PASSWORD_RULES.hasUppercase.test(password))   return 'Must contain at least one uppercase letter'
-  if (!PASSWORD_RULES.hasLowercase.test(password))   return 'Must contain at least one lowercase letter'
-  if (!PASSWORD_RULES.hasNumber.test(password))      return 'Must contain at least one number'
+  if (!PASSWORD_RULES.hasUppercase.test(password)) return 'Must contain at least one uppercase letter'
+  if (!PASSWORD_RULES.hasLowercase.test(password)) return 'Must contain at least one lowercase letter'
+  if (!PASSWORD_RULES.hasNumber.test(password)) return 'Must contain at least one number'
   if (!PASSWORD_RULES.hasSpecialChar.test(password)) return 'Must contain at least one special character'
   return ''
 }
@@ -207,10 +206,41 @@ export const validateLoginForm = (
     errors.identifier = 'Please enter your username, email or mobile number'
   }
 
-  const passwordError = validatePassword(password)
-  if (passwordError) errors.password = passwordError
+  // On login, only check the field is not empty — do NOT apply strength rules
+  if (!password) {
+    errors.password = 'Please enter your password'
+  }
 
   return errors
+}
+
+// ─── API Login Error Parser ───────────────────────────────────────────────────
+// When the real backend is connected, call this with the error from the API.
+// The backend should return error codes like:
+//   { code: 'USER_NOT_FOUND' }  → identifier field error
+//   { code: 'WRONG_PASSWORD' }  → password field error
+//   { code: 'ACCOUNT_DISABLED' } → general error
+
+export const parseLoginApiError = (
+  error: any
+): Record<string, string> => {
+  const code: string = error?.response?.data?.code ?? error?.code ?? ''
+
+  switch (code) {
+    case 'USER_NOT_FOUND':
+    case 'IDENTIFIER_NOT_FOUND':
+      return { identifier: 'No account found with this email, username or mobile number' }
+
+    case 'WRONG_PASSWORD':
+    case 'INVALID_PASSWORD':
+      return { password: 'Incorrect password. Please try again.' }
+
+    case 'ACCOUNT_DISABLED':
+      return { general: 'Your account has been disabled. Please contact support.' }
+
+    default:
+      return { general: error?.response?.data?.message ?? 'Something went wrong. Please try again.' }
+  }
 }
 
 // ─── Step 1 Validation ────────────────────────────────────────────────────────
@@ -222,9 +252,9 @@ export const validateStep1 = (values: RegisterStep1Values): Record<string, strin
   if (nameError) errors.fullName = nameError
 
   if (!values.dobMonth) errors.dobMonth = 'Required'
-  if (!values.dobDay)   errors.dobDay   = 'Required'
-  if (!values.dobYear)  errors.dobYear  = 'Required'
-  if (!values.gender)   errors.gender  = 'Please select your gender'
+  if (!values.dobDay) errors.dobDay = 'Required'
+  if (!values.dobYear) errors.dobYear = 'Required'
+  if (!values.gender) errors.gender = 'Please select your gender'
 
   return errors
 }

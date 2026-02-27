@@ -1,3 +1,5 @@
+// src/features/auth/components/RegisterStep1.tsx
+
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Input } from '@shared/components/ui/Input'
@@ -24,7 +26,9 @@ const RegisterStep1: React.FC<Props> = ({ hook }) => {
   const {
     step1,
     errors,
+    touched,
     updateStep1,
+    markTouched,
     goNext,
     goBack,
     currentStep,
@@ -56,56 +60,64 @@ const RegisterStep1: React.FC<Props> = ({ hook }) => {
         </View>
       </View>
 
-      {/* ── Full Name — no first/last name condition ── */}
+      {/* ── Full Name ── */}
       <Input
         placeholder="Full Name"
         value={step1.fullName}
         onChangeText={(v) => updateStep1('fullName', v)}
-        error={errors.fullName}
+        onBlur={() => markTouched('fullName')}
+        error={touched.fullName ? errors.fullName : undefined}
         autoCapitalize="words"
         autoCorrect={false}
       />
 
-      {/* ── Date of Birth — inline dropdowns open below ── */}
+      {/* ── Date of Birth ── */}
       <Text style={styles.dobLabel}>Date of Birth</Text>
       <View style={styles.dobRow}>
         <InlineDropdown
           options={MONTH_OPTIONS}
           value={step1.dobMonth}
-          onChange={(opt: InlineDropdownOption) =>
+          onChange={(opt: InlineDropdownOption) => {
             updateStep1('dobMonth', opt.value)
-          }
+            markTouched('dobMonth')
+          }}
           placeholder="MM"
-          error={errors.dobMonth}
+          error={touched.dobMonth ? errors.dobMonth : undefined}
         />
         <InlineDropdown
           options={DAY_OPTIONS}
           value={step1.dobDay}
-          onChange={(opt: InlineDropdownOption) =>
+          onChange={(opt: InlineDropdownOption) => {
             updateStep1('dobDay', opt.value)
-          }
+            markTouched('dobDay')
+          }}
           placeholder="DD"
-          error={errors.dobDay}
+          error={touched.dobDay ? errors.dobDay : undefined}
         />
         <InlineDropdown
           options={YEAR_OPTIONS}
           value={step1.dobYear}
-          onChange={(opt: InlineDropdownOption) =>
+          onChange={(opt: InlineDropdownOption) => {
             updateStep1('dobYear', opt.value)
-          }
+            markTouched('dobYear')
+          }}
           placeholder="YYYY"
-          error={errors.dobYear}
+          error={touched.dobYear ? errors.dobYear : undefined}
         />
       </View>
 
-      {/* ── Gender — still uses bottom sheet Dropdown ── */}
+      {/* ── Gender ── */}
+      {/* Dropdowns fire onChange not onBlur so mark touched on change */}
       <Dropdown
         label="Select Gender"
         options={GENDER_OPTIONS}
         value={step1.gender}
-        onChange={(opt: DropdownOption) => updateStep1('gender', opt.value)}
+        onChange={(opt: DropdownOption) => {
+          updateStep1('gender', opt.value)
+          markTouched('gender')
+        }}
         placeholder="Select Gender"
-        error={errors.gender}
+        error={touched.gender ? errors.gender : undefined}
       />
 
       {/* ── Continue ── */}

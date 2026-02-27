@@ -1,3 +1,5 @@
+// src/features/auth/components/styles/RegisterFormStyle.ts
+
 import { StyleSheet, Dimensions } from 'react-native'
 import Colors from '@constants/colors'
 import { FontSize, Spacing, Radius } from '@constants/theme'
@@ -6,11 +8,16 @@ const { width } = Dimensions.get('window')
 
 export const styles = StyleSheet.create({
 
-  // ─── Line 1: Back arrow alone ─────────────────────────
+  // ─── Rule 3: fills the ScrollView ─────────────────────
+  formContainer: {
+    flex: 1,
+  },
+
+  // ─── Line 1: Back arrow ───────────────────────────────
   backRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.xl,
+    marginBottom: Spacing.sm,
     marginTop: Spacing.sm,
   },
   backButton: {
@@ -24,7 +31,7 @@ export const styles = StyleSheet.create({
     lineHeight: 32,
   },
 
-  // ─── Line 2: Heading ──────────────────────────────────
+  // ─── Line 2: Heading + subtitle ───────────────────────
   titleRow: {
     marginBottom: Spacing.sm,
     alignItems: 'center',
@@ -35,25 +42,26 @@ export const styles = StyleSheet.create({
     color: Colors.textPrimary,
     letterSpacing: -0.3,
   },
-
   pageSubtitle: {
     fontSize: FontSize.sm,
     color: Colors.textSecondary,
+    textAlign: 'center',
     maxWidth: width * 0.8,
-    marginTop: Spacing.sm,
-    marginBottom: Spacing.md,
+    marginTop: Spacing.xs,
+    lineHeight: 20,
   },
 
   // ─── Line 3: Progress bar ─────────────────────────────
   progressRow: {
-    marginBottom: Spacing.xl,
     alignItems: 'center',
+    marginBottom: Spacing.xl,
+    marginTop: Spacing.sm,
   },
   progressBar: {
-    width: '80%',               // 50% width, left aligned
+    width: '80%',
   },
 
-  // ─── DOB row — 3 inline dropdowns side by side ────────
+  // ─── DOB row ──────────────────────────────────────────
   dobLabel: {
     fontSize: FontSize.sm,
     fontWeight: '600',
@@ -110,7 +118,7 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // ─── Password conditions checker ──────────────────────
+  // ─── Password conditions ──────────────────────────────
   conditionsContainer: {
     backgroundColor: `${Colors.teal}08`,
     borderRadius: Radius.md,
@@ -160,17 +168,67 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  // ─── Action button ────────────────────────────────────
-  actionBtn: {
-    marginTop: Spacing.lg,
+  // ─── Terms checkbox ───────────────────────────────────
+  termsRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginTop: Spacing.md,
+    marginBottom: Spacing.sm,
+    gap: Spacing.sm,
+  },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: Colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 1,
+    flexShrink: 0,
+  },
+  checkboxChecked: {
+    backgroundColor: Colors.teal,
+    borderColor: Colors.teal,
+  },
+  checkboxError: {
+    borderColor: Colors.error,
+  },
+  checkboxTick: {
+    color: Colors.textWhite,
+    fontSize: 13,
+    fontWeight: '700',
+    lineHeight: 15,
+  },
+  termsText: {
+    flex: 1,
+    fontSize: FontSize.sm,
+    color: Colors.textSecondary,
+    lineHeight: 20,
+  },
+  termsLink: {
+    color: Colors.teal,
+    fontWeight: '600',
+  },
+  termsErrorText: {
+    fontSize: FontSize.xs,
+    color: Colors.error,
+    marginBottom: Spacing.sm,
+    marginLeft: 34,
   },
 
-  // ─── Already have account row ─────────────────────────
+  // ─── Action button ────────────────────────────────────
+  actionBtn: {
+    marginTop: Spacing.sm,
+  },
+
+  // ─── Already have account ─────────────────────────────
   loginRow: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: Spacing.xl,
+    marginTop: Spacing.lg,
+    paddingBottom: 0,
   },
   loginText: {
     fontSize: FontSize.sm,

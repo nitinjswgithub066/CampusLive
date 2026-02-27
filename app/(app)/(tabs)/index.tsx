@@ -1,16 +1,41 @@
 // app/(app)/(tabs)/index.tsx
 
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native'
+import { router } from 'expo-router'
+import { useUserStore } from '@store/useStore'
 import Colors from '@constants/colors'
 
-// TODO: replace with FeedScreen when built
-// import FeedScreen from '@features/feed/components/FeedScreen'
-// export default FeedScreen
-
 export default function HomeTab() {
+  const { user, clearUser } = useUserStore()
+
+  const handleLogout = () => {
+    clearUser()
+    // Must explicitly navigate — app/index.tsx Redirect only runs on mount
+    // so it won't react to clearUser() when already inside /(app)/(tabs)
+    router.replace('/(auth)') 
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home Feed — Coming Soon</Text>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor={Colors.textWhite}
+        translucent={false}
+      />
+
+      <Text style={styles.welcome}>Welcome to Campus Live 🎙️</Text>
+
+      {user && (
+        <Text style={styles.subtitle}>Logged in as {user.email}</Text>
+      )}
+
+      <TouchableOpacity
+        style={styles.logoutBtn}
+        onPress={handleLogout}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.logoutText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -18,12 +43,32 @@ export default function HomeTab() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.textWhite,
+    backgroundColor: Colors.backgroundCard,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 24,
   },
-  text: {
-    color: Colors.textSecondary,
-    fontSize: 16,
+  welcome: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: Colors.textMuted,
+    marginBottom: 48,
+  },
+  logoutBtn: {
+    backgroundColor: Colors.error,
+    paddingHorizontal: 40,
+    paddingVertical: 14,
+    borderRadius: 999,
+  },
+  logoutText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 15,
   },
 })
