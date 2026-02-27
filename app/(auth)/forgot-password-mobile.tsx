@@ -1,2 +1,0 @@
-import ForgotPasswordMobileScreen from '@features/auth/components/ForgotPasswordMobileScreen'
-export default ForgotPasswordMobileScreen

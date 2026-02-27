@@ -1,6 +1,9 @@
+// src/features/auth/hooks/useForgotPassword.ts
+
 import { useState, useEffect, useRef } from 'react'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router } from 'expo-router'
 import { getPasswordConditions, isPasswordValid } from '@features/auth/utils/authHelpers'
+import { detectIdentifierType } from '@features/auth/utils/authHelpers'
 
 // ─── Timer constant ───────────────────────────────────────────────────────────
 
@@ -9,27 +12,11 @@ const OTP_DURATION_SECONDS = 60
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
 const useForgotPassword = () => {
-
-  // ── Read URL params ────────────────────────────────────────────────────────
-  // via=mobile means coming from ForgotPasswordMobileScreen
-  // identifier is pre-filled mobile number in that case
-  // step=2 means skip step 1 and land directly on OTP screen
-  const { via, identifier: paramIdentifier, step: paramStep } = useLocalSearchParams<{
-    via?:        string
-    identifier?: string
-    step?:       string
-  }>()
-
-  const [isMobileFlow]    = useState(via === 'mobile')
-
-  // ── Steps ─────────────────────────────────────────────────────────────────
-  const [currentStep, setCurrentStep] = useState(
-    paramStep === '2' ? 2 : 1   // jump to step 2 if coming from mobile screen
-  )
+  const [currentStep, setCurrentStep] = useState(1)
   const totalSteps = 3
 
   // ── Step 1 ────────────────────────────────────────────────────────────────
-  const [identifier, setIdentifier] = useState(paramIdentifier ?? '')
+  const [identifier, setIdentifier] = useState('')
 
   // ── Step 2 ────────────────────────────────────────────────────────────────
   const [otp, setOtp]                 = useState('')
@@ -44,8 +31,15 @@ const useForgotPassword = () => {
   const [isConfirmVisible, setIsConfirmVisible]   = useState(false)
 
   // ── Shared ────────────────────────────────────────────────────────────────
-  const [errors, setErrors]   = useState<Record<string, string>>({})
+  const [errors, setErrors]       = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(false)
+
+  // ── Touched — no premature errors on load ─────────────────────────────────
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
+
+  const markTouched = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }))
+  }
 
   // ─── Timer ────────────────────────────────────────────────────────────────
 
@@ -65,12 +59,6 @@ const useForgotPassword = () => {
     }, 1000)
   }
 
-  // Start timer automatically if landing on step 2 via mobile flow
-  useEffect(() => {
-    if (paramStep === '2') startTimer()
-  }, [])
-
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
@@ -86,8 +74,7 @@ const useForgotPassword = () => {
     setOtp('')
     setErrors({})
     try {
-      // TODO: Call resend OTP API
-      // await resendOtpMutation({ identifier, via: isMobileFlow ? 'mobile' : 'email' })
+      // TODO: await resendOtpMutation({ identifier })
       await new Promise((r) => setTimeout(r, 500))
       startTimer()
     } catch (error: any) {
@@ -97,30 +84,32 @@ const useForgotPassword = () => {
 
   // ─── Back navigation ──────────────────────────────────────────────────────
 
-const goBack = () => {
-  setErrors({})
-  if (currentStep === 1) {
-    router.back()
-  } else if (currentStep === 2 && isMobileFlow) {
-    // ── Came from mobile screen → go back to mobile screen ──
-    // Do not decrement step — navigate back in the stack instead
-    router.back()
-  } else {
-    setCurrentStep((prev) => prev - 1)
+  const goBack = () => {
+    setErrors({})
+    if (currentStep === 1) {
+      router.back()
+    } else {
+      setCurrentStep((prev) => prev - 1)
+    }
   }
-}
 
   // ─── Step 1 submit ────────────────────────────────────────────────────────
+  // Accepts email, username or mobile number in one field
+  // detectIdentifierType figures out which one it is for the backend
 
   const handleStep1 = async () => {
+    setTouched((prev) => ({ ...prev, identifier: true }))
+
     if (!identifier.trim()) {
-      setErrors({ identifier: 'Please enter your email, username or User ID' })
+      setErrors({ identifier: 'Please enter your email, username or mobile number' })
       return
     }
 
+    const identifierType = detectIdentifierType(identifier)
+
     setIsLoading(true)
     try {
-      // TODO: await forgotPasswordMutation({ identifier })
+      // TODO: await forgotPasswordMutation({ identifier, identifierType })
       await new Promise((r) => setTimeout(r, 1200))
       setErrors({})
       setCurrentStep(2)
@@ -203,6 +192,7 @@ const goBack = () => {
     newPassword,
     confirmPassword,
     errors,
+    touched,
     isLoading,
     isPasswordVisible,
     isConfirmVisible,
@@ -211,11 +201,11 @@ const goBack = () => {
     secondsLeft,
     passwordConditions,
     allConditionsMet,
-    isMobileFlow,
     setIdentifier,
     setOtp,
     setNewPassword,
     setConfirmPassword,
+    markTouched,
     togglePassword:        () => setIsPasswordVisible((p) => !p),
     toggleConfirmPassword: () => setIsConfirmVisible((p) => !p),
     goBack,

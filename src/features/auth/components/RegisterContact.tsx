@@ -10,6 +10,7 @@ import { PROFESSION_OPTIONS } from '@features/auth/utils/authHelpers'
 import type { DropdownOption } from '@shared/components/ui/Dropdown'
 import { styles } from '@features/auth/components/styles/RegisterFormStyle'
 import useRegister from '@features/auth/hooks/useRegister'
+import BackButton from '@/src/shared/components/ui/BackButton'
 
 interface Props {
   hook: ReturnType<typeof useRegister>
@@ -34,10 +35,8 @@ const RegisterContact: React.FC<Props> = ({ hook }) => {
     <View>
 
       {/* ── Line 1: Back arrow ── */}
-      <View style={styles.backRow}>
-        <TouchableOpacity onPress={goBack} style={styles.backButton}>
-          <Text style={styles.backText}>←</Text>
-        </TouchableOpacity>
+      <View style={[styles.backRow, styles.backButton]}>
+         <BackButton onPress={goBack} />
       </View>
 
       {/* ── Line 2: Heading ── */}

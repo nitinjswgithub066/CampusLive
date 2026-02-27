@@ -8,17 +8,11 @@ export const styles = StyleSheet.create({
   backRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.md,
   },
-  backButton: {
+  backbutton: {
     paddingVertical: Spacing.xs,
     paddingRight: Spacing.md,
-  },
-  backText: {
-    fontSize: 28,
-    color: Colors.textPrimary,
-    fontWeight: '600',
-    lineHeight: 32,
   },
 
   // ─── Line 2: Heading ──────────────────────────────────
@@ -41,6 +35,12 @@ export const styles = StyleSheet.create({
     color: Colors.textMuted,
     lineHeight: 20,
   },
+  otpError: {
+  color: Colors.error,
+  fontSize: 11,
+  marginTop: 4,
+  marginLeft: 4,
+},
 
   // ─── OTP Input box ────────────────────────────────────
   otpWrapper: {
@@ -181,3 +181,5 @@ export const styles = StyleSheet.create({
     marginTop: Spacing.sm,
   },
 })
+
+export default styles

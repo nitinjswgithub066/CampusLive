@@ -1,10 +1,12 @@
+// src/features/auth/components/ForgotPasswordEmail.tsx
+
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Input } from '@shared/components/ui/Input'
 import { Button } from '@shared/components/ui/Button'
 import { styles } from '@features/auth/components/styles/ForgotPasswordFormStyle'
 import useForgotPassword from '@features/auth/hooks/useForgotPassword'
-import { router } from 'expo-router'
+import BackButton from '@shared/components/ui/BackButton'
 
 interface Props {
   hook: ReturnType<typeof useForgotPassword>
@@ -15,7 +17,9 @@ const ForgotPasswordEmail: React.FC<Props> = ({ hook }) => {
     identifier,
     errors,
     isLoading,
+    touched,
     setIdentifier,
+    markTouched,
     goBack,
     handleStep1,
   } = hook
@@ -24,10 +28,8 @@ const ForgotPasswordEmail: React.FC<Props> = ({ hook }) => {
     <View>
 
       {/* ── Line 1: Back arrow ── */}
-      <View style={styles.backRow}>
-        <TouchableOpacity onPress={goBack} style={styles.backButton}>
-          <Text style={styles.backText}>←</Text>
-        </TouchableOpacity>
+      <View style={[styles.backRow, styles.backbutton]}>
+         <BackButton onPress={goBack} />
       </View>
 
       {/* ── Line 2: Heading ── */}
@@ -50,11 +52,18 @@ const ForgotPasswordEmail: React.FC<Props> = ({ hook }) => {
       )}
 
       {/* ── Identifier Input ── */}
+      {/* Accepts email, username or mobile number in one field */}
       <Input
-        placeholder="Email, Username or User ID"
+        placeholder="Email, Username or Mobile Number"
         value={identifier}
-        onChangeText={setIdentifier}
-        error={errors.identifier}
+        onChangeText={(v) => {
+          setIdentifier(v)
+          if (touched.identifier) {
+            // clear error while typing after first touch
+          }
+        }}
+        onBlur={() => markTouched('identifier')}
+        error={touched.identifier ? errors.identifier : undefined}
         autoCapitalize="none"
         autoCorrect={false}
         keyboardType="email-address"
@@ -67,17 +76,6 @@ const ForgotPasswordEmail: React.FC<Props> = ({ hook }) => {
         isLoading={isLoading}
         style={styles.actionBtn}
       />
-
-      {/* ── Try another way ── */}
-      <TouchableOpacity
-        style={styles.tryAnotherRow}
-        onPress={() => {
-          router.push('/(auth)/recovery-options' as any)
-        }}
-        activeOpacity={0.7}
-      >
-        <Text style={styles.tryAnotherText}>Try another way</Text>
-      </TouchableOpacity>
 
     </View>
   )

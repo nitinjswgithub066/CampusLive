@@ -17,18 +17,11 @@ export const styles = StyleSheet.create({
   backRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
-    marginTop: Spacing.sm,
+    marginBottom: Spacing.md,
   },
   backButton: {
     paddingVertical: Spacing.xs,
     paddingRight: Spacing.md,
-  },
-  backText: {
-    fontSize: 28,
-    color: Colors.textPrimary,
-    fontWeight: '600',
-    lineHeight: 32,
   },
 
   // ─── Line 2: Heading + subtitle ───────────────────────

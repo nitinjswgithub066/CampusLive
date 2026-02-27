@@ -1,3 +1,5 @@
+// src/features/auth/components/ForgotPasswordOtp.tsx
+
 import React from 'react'
 import {
   View,
@@ -9,6 +11,7 @@ import { Button } from '@shared/components/ui/Button'
 import { styles } from '@features/auth/components/styles/ForgotPasswordFormStyle'
 import Colors from '@constants/colors'
 import useForgotPassword from '@features/auth/hooks/useForgotPassword'
+import BackButton from '@shared/components/ui/BackButton'
 
 interface Props {
   hook: ReturnType<typeof useForgotPassword>
@@ -21,6 +24,7 @@ const ForgotPasswordOtp: React.FC<Props> = ({ hook }) => {
     isLoading,
     canResend,
     formattedTimer,
+    identifier,
     setOtp,
     goBack,
     handleStep2,
@@ -29,14 +33,24 @@ const ForgotPasswordOtp: React.FC<Props> = ({ hook }) => {
 
   const [isFocused, setIsFocused] = React.useState(false)
 
+  // ── Detect identifier type for dynamic subtitle ────────────────────────────
+  const getSubtitle = () => {
+    const id = identifier.trim()
+    if (/^[6-9]\d{9}$/.test(id)) {
+      return `We've sent a 6-digit code to +91 ${id}`
+    }
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(id)) {
+      return `We've sent a 6-digit code to ${id}`
+    }
+    return "We've sent a 6-digit code to your registered contact"
+  }
+
   return (
     <View>
 
       {/* ── Line 1: Back arrow ── */}
-      <View style={styles.backRow}>
-        <TouchableOpacity onPress={goBack} style={styles.backButton}>
-          <Text style={styles.backText}>←</Text>
-        </TouchableOpacity>
+      <View style={[styles.backRow, styles.backbutton]}>
+         <BackButton onPress={goBack} />
       </View>
 
       {/* ── Line 2: Heading ── */}
@@ -44,14 +58,9 @@ const ForgotPasswordOtp: React.FC<Props> = ({ hook }) => {
         <Text style={styles.pageTitle}>Secure Your Account 🔐</Text>
       </View>
 
-      {/* ── Line 3: Subtitle ── */}
+      {/* ── Line 3: Subtitle — changes based on what user entered ── */}
       <View style={styles.subtitleRow}>
-        <Text style={styles.subtitle}>
-          {hook.isMobileFlow
-            ? `We've sent a 6-digit code to +91 ${hook.identifier}`
-            : "Enter the 6-digit code we've sent to your email address"
-          }
-        </Text>
+        <Text style={styles.subtitle}>{getSubtitle()}</Text>
       </View>
 
       {/* ── General Error ── */}
@@ -71,7 +80,9 @@ const ForgotPasswordOtp: React.FC<Props> = ({ hook }) => {
           <TextInput
             style={styles.otpInput}
             value={otp}
-            onChangeText={(v) => setOtp(v.replace(/[^0-9]/g, '').slice(0, 6))}
+            onChangeText={(v) => {
+              setOtp(v.replace(/[^0-9]/g, '').slice(0, 6))
+            }}
             placeholder="——————"
             placeholderTextColor={Colors.textMuted}
             keyboardType="number-pad"
@@ -80,7 +91,7 @@ const ForgotPasswordOtp: React.FC<Props> = ({ hook }) => {
             onBlur={() => setIsFocused(false)}
           />
 
-          {/* Countdown timer — right side of OTP box */}
+          {/* ── Countdown timer — right side of OTP box ── */}
           <Text style={[
             styles.timerText,
             canResend && styles.timerExpired,
@@ -89,17 +100,17 @@ const ForgotPasswordOtp: React.FC<Props> = ({ hook }) => {
           </Text>
         </View>
 
-        {/* Error below OTP box */}
+        {/* ── OTP error below box ── */}
         {errors.otp && (
-          <Text style={{ color: Colors.error, fontSize: 11, marginTop: 4, marginLeft: 4 }}>
+          <Text style={styles.otpError}>
             {errors.otp}
           </Text>
         )}
       </View>
 
       {/* ── Resend row ── */}
-      {/* Resend text is muted/grey while timer is active */}
-      {/* Turns teal and becomes tappable when timer hits 00:00 */}
+      {/* Grey and disabled while timer is active */}
+      {/* Turns teal and tappable when timer hits 00:00 */}
       <View style={styles.resendRow}>
         <Text style={styles.resendLabel}>Didn't receive the code?</Text>
         <TouchableOpacity

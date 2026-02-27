@@ -5,6 +5,7 @@ import { Button } from '@shared/components/ui/Button'
 import { styles } from '@features/auth/components/styles/ForgotPasswordFormStyle'
 import { styles as inputStyles } from '@shared/components/ui/style/InputStyle'
 import useForgotPassword from '@features/auth/hooks/useForgotPassword'
+import BackButton from '@shared/components/ui/BackButton'
 
 interface Props {
   hook: ReturnType<typeof useForgotPassword>
@@ -33,10 +34,8 @@ const NewPaswordCreate: React.FC<Props> = ({ hook }) => {
     <View>
 
       {/* ── Line 1: Back arrow ── */}
-      <View style={styles.backRow}>
-        <TouchableOpacity onPress={goBack} style={styles.backButton}>
-          <Text style={styles.backText}>←</Text>
-        </TouchableOpacity>
+      <View style={[styles.backRow, styles.backbutton]}>
+         <BackButton onPress={goBack} />
       </View>
 
       {/* ── Line 2: Heading ── */}
