@@ -48,7 +48,7 @@ const RegisterUserProfile: React.FC<Props> = ({ hook }) => {
 
       {/* ── Line 1: Back arrow ── */}
       <View style={[styles.backRow, styles.backButton]}>
-         <BackButton onPress={goBack} />
+        <BackButton onPress={goBack} />
       </View>
 
       {/* ── Line 2: Heading ── */}
@@ -72,17 +72,6 @@ const RegisterUserProfile: React.FC<Props> = ({ hook }) => {
           <Text style={styles.generalErrorText}>{errors.general}</Text>
         </View>
       )}
-
-      {/* ── Display Name ── */}
-      <Input
-        placeholder="Profile Display Name"
-        value={step3.displayName}
-        onChangeText={(v) => updateStep3('displayName', v)}
-        onBlur={() => markTouched('displayName')}
-        error={touched.displayName ? errors.displayName : undefined}
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
 
       {/* ── Username with @ prefix ── */}
       <Input

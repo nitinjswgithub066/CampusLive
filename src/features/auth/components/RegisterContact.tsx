@@ -78,7 +78,7 @@ const RegisterContact: React.FC<Props> = ({ hook }) => {
             error={touched.institutionName ? errors.institutionName : undefined}
             autoCapitalize="words"
           />
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               // TODO: router.push('/(auth)/register-institution')
             }}
@@ -87,7 +87,7 @@ const RegisterContact: React.FC<Props> = ({ hook }) => {
             <Text style={{ color: '#00BFA5', fontSize: 13, fontWeight: '500' }}>
               + Register your institution
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </>
       )}
 
