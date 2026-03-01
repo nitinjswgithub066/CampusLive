@@ -71,7 +71,6 @@ export interface RegisterStep2Values {
 }
 
 export interface RegisterStep3Values {
-  displayName: string
   username: string
   streamingId: string            // auto generated, read only
   password: string

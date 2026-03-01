@@ -18,26 +18,25 @@ import type {
 // ─── Initial States ───────────────────────────────────────────────────────────
 
 const INITIAL_STEP1: RegisterStep1Values = {
-  fullName:  '',
-  dobMonth:  '',
-  dobDay:    '',
-  dobYear:   '',
-  gender:    '',
+  fullName: '',
+  dobMonth: '',
+  dobDay: '',
+  dobYear: '',
+  gender: '',
 }
 
 const INITIAL_STEP2: RegisterStep2Values = {
-  profession:      '',
+  profession: '',
   institutionName: '',
-  invitationCode:  '',
-  mobileNumber:    '',
-  email:           '',
+  invitationCode: '',
+  mobileNumber: '',
+  email: '',
 }
 
 const INITIAL_STEP3: RegisterStep3Values = {
-  displayName:     '',
-  username:        '',
-  streamingId:     generateStreamingId(),
-  password:        '',
+  username: '',
+  streamingId: generateStreamingId(),
+  password: '',
   confirmPassword: '',
 }
 
@@ -51,11 +50,11 @@ const useRegister = () => {
   const [step2, setStep2] = useState<RegisterStep2Values>(INITIAL_STEP2)
   const [step3, setStep3] = useState<RegisterStep3Values>(INITIAL_STEP3)
 
-  const [errors, setErrors]                   = useState<Record<string, string>>({})
-  const [isLoading, setIsLoading]             = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isLoading, setIsLoading] = useState(false)
   const [isTermsAccepted, setIsTermsAccepted] = useState(false)
 
-  const [isPasswordVisible, setIsPasswordVisible]               = useState(false)
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false)
 
   // ─── Touched state ────────────────────────────────────────────────────────
@@ -104,30 +103,29 @@ const useRegister = () => {
       ...prev,
       fullName: true,
       dobMonth: true,
-      dobDay:   true,
-      dobYear:  true,
-      gender:   true,
+      dobDay: true,
+      dobYear: true,
+      gender: true,
     }))
   }
 
   const markAllStep2Touched = () => {
     setTouched((prev) => ({
       ...prev,
-      profession:      true,
+      profession: true,
       institutionName: true,
-      mobileNumber:    true,
-      email:           true,
+      mobileNumber: true,
+      email: true,
     }))
   }
 
   const markAllStep3Touched = () => {
     setTouched((prev) => ({
       ...prev,
-      displayName:     true,
-      username:        true,
-      password:        true,
+      username: true,
+      password: true,
       confirmPassword: true,
-      terms:           true,
+      terms: true,
     }))
   }
 
@@ -226,7 +224,7 @@ const useRegister = () => {
     goBack,
     handleSubmit,
     setIsTermsAccepted,
-    togglePassword:        () => setIsPasswordVisible((p) => !p),
+    togglePassword: () => setIsPasswordVisible((p) => !p),
     toggleConfirmPassword: () => setIsConfirmPasswordVisible((p) => !p),
   }
 }
