@@ -1,8 +1,6 @@
-// Single place to import any store in your app
-// Instead of hunting the exact slice path every time
+// Central export — always import store hooks from here, not from slice paths
 
-export { useUserStore } from './slices/userSlice'
+export { useUserStore, useCurrentUser, useIsLoggedIn, useIsStreamer, useProfileId } from './slices/userSlice'
 
-// Uncomment as you build these features
-// export { useStreamStore } from './slices/streamSlice'
+// export { useStreamStore }       from './slices/streamSlice'
 // export { useNotificationStore } from './slices/notificationSlice'
