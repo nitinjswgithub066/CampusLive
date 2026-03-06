@@ -1,65 +1,52 @@
 import { create } from 'zustand'
-import type { AuthUser, UserRole } from '@features/auth/types'
+import type { AuthUser } from '@features/auth/types'
 
-// ─── Store Shape ─────────────────────────────────────────────────────────────
+// State (data) and Actions (functions)
 
-interface UserStore {
+interface UserState {
   user: AuthUser | null
+}
 
-  // ── Setters ──────────────────────────────────────────
+interface UserActions {
   setUser: (user: AuthUser) => void
   clearUser: () => void
   updateUser: (partial: Partial<AuthUser>) => void
-
-  // ── Role Helper ──────────────────────────────────────
-  switchRole: (role: UserRole) => void
-
-  // ── Computed Getters ─────────────────────────────────
   isLoggedIn: () => boolean
   isStreamer: () => boolean
   getProfileId: () => string | null
-  
 }
 
-// ─── Store ───────────────────────────────────────────────────────────────────
+type UserStore = UserState & UserActions
 
-export const useUserStore = create<UserStore>((set, get) => ({
+export const useUserStore = create<UserStore>()((set, get) => ({
+
   user: null,
 
-  // ── Sets the full user object after login ─────────────────────────────────
+  // Stores the full user object after login
   setUser: (user) => set({ user }),
 
-  // ── Clears user on logout ─────────────────────────────────────────────────
+  // Wipes user on logout
   clearUser: () => set({ user: null }),
 
-  // ── Updates only the fields you pass in ──────────────────────────────────
-  // Example: updateUser({ avatarUrl: 'https://...' })
-  // Use this after profile edits so you don't have to reset the whole user
+  // Merges partial fields — use after profile edits e.g. updateUser({ avatarUrl: '...' })
   updateUser: (partial) =>
     set((state) => ({
-      user: state.user
-        ? { ...state.user, ...partial }
-        : null,
+      user: state.user ? { ...state.user, ...partial } : null,
     })),
 
-  // ── Switches between viewer and streamer role ─────────────────────────────
-  // Without clearing the rest of the user data
-  switchRole: (role) =>
-    set((state) => ({
-      user: state.user
-        ? { ...state.user, role, isStreamer: role === 'streamer' }
-        : null,
-    })),
+  // True if a user object exists in the store (clearUser handles logout)
+  isLoggedIn: () => !!get().user,
 
-  // ── Returns true if user is logged in ────────────────────────────────────
-  // Usage: const loggedIn = useUserStore(state => state.isLoggedIn())
-  isLoggedIn: () => !!get().user?.isLoggedIn,
+  // True if backend marked this user as a streamer — always false for viewers
+  isStreamer: () => get().user?.isStreamer ?? false,
 
-  // ── Returns true if current user is a streamer ───────────────────────────
-  // Usage: const streamer = useUserStore(state => state.isStreamer())
-  isStreamer: () => get().user?.role === 'streamer',
-
-  // ── Returns profileId or null if no user ─────────────────────────────────
-  // Usage: const profileId = useUserStore(state => state.getProfileId())
+  // Returns profileId or null
   getProfileId: () => get().user?.profileId ?? null,
+
 }))
+
+// Selector hooks — use these in components to avoid wasted re-renders
+export const useCurrentUser = () => useUserStore((s) => s.user)
+export const useIsLoggedIn = () => useUserStore((s) => s.isLoggedIn())
+export const useIsStreamer = () => useUserStore((s) => s.isStreamer())
+export const useProfileId = () => useUserStore((s) => s.getProfileId())
