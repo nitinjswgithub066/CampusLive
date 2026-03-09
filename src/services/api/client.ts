@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { setupInterceptors } from './interceptors';
 
-const BASE_URL = process.env.EXPO_BASE_API_URL;
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 /**
  * Configured Axios instance for all API requests
