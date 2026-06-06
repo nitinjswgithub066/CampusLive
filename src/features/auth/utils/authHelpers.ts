@@ -295,9 +295,6 @@ export const validateStep2 = (values: RegisterStep2Values): Record<string, strin
 export const validateStep3 = (values: RegisterStep3Values): Record<string, string> => {
   const errors: Record<string, string> = {}
 
-  const displayNameError = validateDisplayName(values.displayName)
-  if (displayNameError) errors.displayName = displayNameError
-
   const usernameError = validateUsername(values.username)
   if (usernameError) errors.username = usernameError
 

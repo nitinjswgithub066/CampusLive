@@ -112,7 +112,7 @@ const ForgotPasswordOtp: React.FC<Props> = ({ hook }) => {
       {/* Grey and disabled while timer is active */}
       {/* Turns teal and tappable when timer hits 00:00 */}
       <View style={styles.resendRow}>
-        <Text style={styles.resendLabel}>Didn't receive the code?</Text>
+        <Text style={styles.resendLabel}>Did not receive the code?</Text>
         <TouchableOpacity
           onPress={handleResend}
           disabled={!canResend}

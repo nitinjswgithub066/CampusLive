@@ -8,7 +8,7 @@ export interface LoginFormValues {
   role: UserRole
 }
 
-export interface RegisterFormValues {
+export interface RegisterCredentialsValues {
   username: string
   email: string
   mobileNumber: string
