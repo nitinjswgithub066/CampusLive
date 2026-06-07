@@ -37,5 +37,3 @@ export const typography = {
     lineHeight: 16,
   },
 } as const
-
-export default typography

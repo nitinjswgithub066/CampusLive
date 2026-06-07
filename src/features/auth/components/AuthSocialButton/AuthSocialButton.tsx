@@ -1,8 +1,8 @@
-import { StyleSheet, View } from 'react-native'
-import { AppButton } from './AppButton'
-import { AppIcon } from './icons/AppIcon'
-import colors from '@constants/colors'
-import { spacing } from '@constants/spacing'
+import { View } from 'react-native'
+import { AppButton } from '@shared/components/ui/AppButton'
+import { AppIcon } from '@shared/components/ui/icons/AppIcon'
+import { colors } from '@constants/index'
+import { styles } from './stylesheet'
 
 type SocialProvider = 'google' | 'facebook' | 'apple' | 'email'
 
@@ -29,12 +29,12 @@ export function AuthSocialButton({
   return (
     <AppButton
       title={title}
-      variant="secondary"
+      variant="outline"
       onPress={onPress}
       icon={
         <View style={styles.iconBox}>
           <AppIcon
-            color={colors.light.textPrimary}
+            color={colors.textPrimary}
             name={icon.name}
             set={icon.set}
             size={20}
@@ -44,13 +44,3 @@ export function AuthSocialButton({
     />
   )
 }
-
-const styles = StyleSheet.create({
-  iconBox: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: spacing.xl,
-  },
-})
-
-export default AuthSocialButton

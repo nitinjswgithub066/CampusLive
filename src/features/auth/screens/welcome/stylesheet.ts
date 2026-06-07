@@ -1,0 +1,95 @@
+import { StyleSheet } from 'react-native'
+import { colors, radius, shadows, spacing, typography } from '@constants/index'
+
+export const styles = StyleSheet.create({
+  content: {
+    alignItems: 'center',
+    flex: 1,
+    gap: spacing['2xl'],
+    justifyContent: 'center',
+    width: '100%',
+  },
+  heroCard: {
+    backgroundColor: colors.elevated,
+    borderColor: colors.border,
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    gap: spacing.lg,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.xl,
+    width: '100%',
+    ...shadows.soft,
+  },
+  illustration: {
+    alignItems: 'center',
+    backgroundColor: '#FFF1EB',
+    borderRadius: radius.xl,
+    gap: spacing.md,
+    overflow: 'hidden',
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.xl,
+    width: '100%',
+  },
+  liveCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.md,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.lg,
+    width: '100%',
+  },
+  liveHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  liveDot: {
+    backgroundColor: colors.primary,
+    borderRadius: radius.round,
+    height: 10,
+    width: 10,
+  },
+  liveLabel: {
+    ...typography.caption,
+    color: colors.primary,
+  },
+  playCircle: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: colors.community,
+    borderRadius: radius.round,
+    height: 72,
+    justifyContent: 'center',
+    width: 72,
+  },
+  playTriangle: {
+    borderBottomColor: 'transparent',
+    borderBottomWidth: 13,
+    borderLeftColor: colors.surface,
+    borderLeftWidth: 20,
+    borderTopColor: 'transparent',
+    borderTopWidth: 13,
+    height: 0,
+    width: 0,
+  },
+  copy: {
+    gap: spacing.sm,
+    width: '100%',
+  },
+  title: {
+    ...typography.h1,
+    color: colors.textPrimary,
+    textAlign: 'center',
+  },
+  subtitle: {
+    ...typography.body,
+    color: colors.textSecondary,
+    textAlign: 'center',
+  },
+  actions: {
+    gap: spacing.md,
+    width: '100%',
+  },
+})

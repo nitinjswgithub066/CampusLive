@@ -8,5 +8,3 @@ export const spacing = {
   '3xl': 40,
   '4xl': 56,
 } as const
-
-export default spacing

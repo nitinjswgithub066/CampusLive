@@ -1,14 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { ScreenContainer } from '@shared/components/ui/ScreenContainer'
-import colors from '@constants/colors'
-import { typography } from '@constants/fonts'
-import { spacing } from '@constants/spacing'
+import { ScreenContainer } from '@shared/components/layout/ScreenContainer'
+import { colors, spacing, typography } from '@constants/index'
 
 export default function HomePlaceholderRoute() {
   return (
     <ScreenContainer centered>
       <View style={styles.content}>
-        <Text style={styles.title}>Home Feed will be created after authentication flow.</Text>
+        <Text style={styles.title}>Home Feed will be created later.</Text>
       </View>
     </ScreenContainer>
   )
@@ -22,7 +20,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...typography.h2,
-    color: colors.light.textPrimary,
+    color: colors.textPrimary,
     textAlign: 'center',
   },
 })

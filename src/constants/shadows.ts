@@ -14,5 +14,3 @@ export const shadows = {
     default: {},
   }),
 } as const
-
-export default shadows

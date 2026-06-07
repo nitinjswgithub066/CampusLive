@@ -5,5 +5,3 @@ export const radius = {
   xl: 16,
   round: 999,
 } as const
-
-export default radius
